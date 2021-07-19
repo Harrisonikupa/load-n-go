@@ -56,32 +56,125 @@ class DeliveriesView extends StatelessWidget {
                   ),
                   onMapCreated: (GoogleMapController controller) {
                     model.controller = controller;
-                    // model.controller.complete(controller);
-                    // model.showPinsOnMap();
-                    // model.setPolylines();
                   },
                 ),
               ),
-              Positioned(
-                top: getProportionateScreenHeight(60),
-                left: getProportionateScreenWidth(50),
-                right: getProportionateScreenWidth(50),
-                bottom: getProportionateScreenHeight(500),
-                child: Opacity(
-                  opacity: 0.5,
-                  child: Container(
-                    padding:
-                        new EdgeInsets.all(getProportionateScreenWidth(10)),
-                    decoration: BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: BorderRadius.circular(
-                            getProportionateScreenWidth(10))),
-                    width: 40.0,
-                    height: 40.0,
-                    child: Text('Hello'),
-                  ),
-                ),
-              )
+              model.totalDistance! != ''
+                  ? Positioned(
+                      top: getProportionateScreenHeight(60),
+                      left: getProportionateScreenWidth(50),
+                      right: getProportionateScreenWidth(50),
+                      bottom: getProportionateScreenHeight(550),
+                      child: Container(
+                        padding:
+                            new EdgeInsets.all(getProportionateScreenWidth(10)),
+                        decoration: BoxDecoration(
+                            color: primaryColor,
+                            borderRadius: BorderRadius.circular(
+                                getProportionateScreenWidth(10))),
+                        width: 40.0,
+                        height: 40.0,
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Distance:',
+                                  style: TextStyle(
+                                      fontSize: getProportionateScreenWidth(15),
+                                      fontWeight: FontWeight.w600,
+                                      color: whiteColor),
+                                ),
+                                SizedBox(
+                                  width: getProportionateScreenWidth(5),
+                                ),
+                                Text(
+                                  '${model.totalDistance} KM',
+                                  style: TextStyle(
+                                      fontSize: getProportionateScreenWidth(15),
+                                      fontWeight: FontWeight.w600,
+                                      color: whiteColor),
+                                )
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Time:',
+                                  style: TextStyle(
+                                      fontSize: getProportionateScreenWidth(15),
+                                      fontWeight: FontWeight.w600,
+                                      color: whiteColor),
+                                ),
+                                SizedBox(
+                                  width: getProportionateScreenWidth(5),
+                                ),
+                                Text(
+                                  '${model.overallTime} Minutes',
+                                  style: TextStyle(
+                                    fontSize: getProportionateScreenWidth(15),
+                                    fontWeight: FontWeight.w600,
+                                    color: whiteColor,
+                                  ),
+                                )
+                              ],
+                            ),
+                            Divider(
+                              color: whiteColor,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'From:',
+                                  style: TextStyle(
+                                      fontSize: getProportionateScreenWidth(15),
+                                      fontWeight: FontWeight.w600,
+                                      color: whiteColor),
+                                ),
+                                SizedBox(
+                                  width: getProportionateScreenWidth(5),
+                                ),
+                                Text(
+                                  '${model.startAddress}',
+                                  style: TextStyle(
+                                    fontSize: getProportionateScreenWidth(15),
+                                    fontWeight: FontWeight.w600,
+                                    color: whiteColor,
+                                  ),
+                                )
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'To:',
+                                  style: TextStyle(
+                                      fontSize: getProportionateScreenWidth(15),
+                                      fontWeight: FontWeight.w600,
+                                      color: whiteColor),
+                                ),
+                                SizedBox(
+                                  width: getProportionateScreenWidth(5),
+                                ),
+                                Text(
+                                  '${model.destinationAddress}',
+                                  style: TextStyle(
+                                    fontSize: getProportionateScreenWidth(15),
+                                    fontWeight: FontWeight.w600,
+                                    color: whiteColor,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : Container()
             ],
           ),
         ),
@@ -164,7 +257,7 @@ class DeliveriesView extends StatelessWidget {
                           children: [
                             TextInput(
                               hintText: 'Input your address or postal code',
-                              labelText: 'Pickup Address',
+                              labelText: 'Start Address',
                               controller: model.pickupLocationController,
                               keyboardType: TextInputType.text,
                               validator: (value) {
@@ -182,7 +275,7 @@ class DeliveriesView extends StatelessWidget {
                             ),
                             TextInput(
                               hintText: 'Input your address or postal code',
-                              labelText: 'Delivery Address',
+                              labelText: 'Destination Address',
                               controller: model.deliveryLocationController,
                               keyboardType: TextInputType.text,
                               validator: (value) {

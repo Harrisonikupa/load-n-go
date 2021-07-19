@@ -25,6 +25,8 @@ class DeliveriesViewModel extends BaseViewModel {
   final formKey = GlobalKey<FormState>();
   final pickupLocationController = TextEditingController();
   final deliveryLocationController = TextEditingController();
+  String? totalDistance = '';
+  String? overallTime = '';
   RouteOptimizationResponse _solvedOptimizationResponse =
       new RouteOptimizationResponse();
   RouteOptimizationResponse get solvedOptimizationResponse =>
@@ -81,7 +83,7 @@ class DeliveriesViewModel extends BaseViewModel {
         CameraUpdate.newCameraPosition(
           CameraPosition(
             target: LatLng(position.latitude, position.longitude),
-            zoom: 16.0,
+            zoom: CAMERA_ZOOM,
           ),
         ),
       );
@@ -195,8 +197,12 @@ class DeliveriesViewModel extends BaseViewModel {
 
       if (result is RouteOptimizationResponse) {
         _solvedOptimizationResponse = result;
-
-        solvedOptimizationResponse.solution!.routes![0].points!
+        totalDistance =
+            (_solvedOptimizationResponse.solution!.distance! / 1000).toString();
+        overallTime =
+            (_solvedOptimizationResponse.solution!.transportTime! / 60)
+                .toString();
+        _solvedOptimizationResponse.solution!.routes![0].points!
             .forEach((coordinates) {
           coordinates.coordinates!.forEach((element) {
             polylineCoordinates.add(LatLng(element[1], element[0]));

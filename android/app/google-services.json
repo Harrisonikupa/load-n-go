@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "519692271984",
+    "project_id": "load-n-go-53f47",
+    "storage_bucket": "load-n-go-53f47.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:519692271984:android:f611855bb3924a420dcfb5",
+        "android_client_info": {
+          "package_name": "com.example.loadngo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "519692271984-baubpvearg637iiqfgpi49klvl1dcita.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-t1hkoMnxeZDIWtMVVTW52FhN8csOsng"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "519692271984-baubpvearg637iiqfgpi49klvl1dcita.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

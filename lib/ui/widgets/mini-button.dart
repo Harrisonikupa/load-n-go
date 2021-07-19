@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:loadngo/ui/responsiveness/sizing.config.dart';
 
-class SortTablet extends StatelessWidget {
-  final Function()? tap;
+class MiniButton extends StatelessWidget {
+  final GestureTapCallback? tap;
   final Color? textColor;
   final Color? backgroundColor;
   final Color? borderColor;
   final String? label;
 
-  const SortTablet(
+  const MiniButton(
       {Key? key,
       this.tap,
       this.label,

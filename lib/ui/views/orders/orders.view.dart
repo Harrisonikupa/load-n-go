@@ -140,53 +140,6 @@ class OrdersView extends StatelessWidget {
                     10.0,
                   ),
                 ),
-                // Text(
-                //   'Sort By',
-                //   style: TextStyle(
-                //     fontSize: getProportionateScreenHeight(14.0),
-                //   ),
-                // ),
-                // SizedBox(
-                //   height: getProportionateScreenHeight(5.0),
-                // ),
-                // SingleChildScrollView(
-                //   scrollDirection: Axis.horizontal,
-                //   child: Row(
-                //     children: [
-                //       SortTablet(
-                //         tap: model.selectSortingType(1),
-                //         label: 'Area Code',
-                //         textColor: whiteColor,
-                //         borderColor: primaryColor,
-                //         backgroundColor: primaryColor,
-                //       ),
-                //       SortTablet(
-                //         tap: model.selectSortingType(2),
-                //         label: 'Pickup Date',
-                //         textColor: whiteColor,
-                //         borderColor: primaryColor,
-                //         backgroundColor: primaryColor,
-                //       ),
-                //       SortTablet(
-                //         tap: model.selectSortingType(3),
-                //         label: 'Delivery Date',
-                //         textColor: whiteColor,
-                //         borderColor: primaryColor,
-                //         backgroundColor: primaryColor,
-                //       ),
-                //       SortTablet(
-                //         tap: model.selectSortingType(4),
-                //         label: 'Merchant Name',
-                //         textColor: whiteColor,
-                //         borderColor: primaryColor,
-                //         backgroundColor: primaryColor,
-                //       ),
-                //     ],
-                //   ),
-                // ),
-                // SizedBox(
-                //   height: getProportionateScreenHeight(10.0),
-                // ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

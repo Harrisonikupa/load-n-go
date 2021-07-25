@@ -273,314 +273,324 @@ class OrdersView extends StatelessWidget {
         ),
       );
   Widget buildSheet(OrdersViewModel model) => makeDismissible(
-      child: DraggableScrollableSheet(
-        initialChildSize: 0.9,
-        // maxChildSize: 0.8,
-        // minChildSize: 0.3,
-        builder: (_, controller) => Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(
-                  getProportionateScreenWidth(16),
-                ),
-              ),
-            ),
-            // padding: new EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                SizedBox(
-                  width: double.infinity,
-                  height: getProportionateScreenHeight(50),
-                  child: Container(
-                    padding: new EdgeInsets.symmetric(
-                        horizontal: getProportionateScreenWidth(10)),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(
-                          getProportionateScreenWidth(16),
-                        ),
-                      ),
-                      color: primaryColor,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Search Filter',
-                          style: TextStyle(
-                              fontSize: getProportionateScreenWidth(16.0),
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white),
-                        ),
-                        IconButton(
-                            onPressed: model.navigateBack,
-                            icon: Icon(
-                              Icons.close,
-                              color: Colors.white,
-                              size: getProportionateScreenWidth(24),
-                            ))
-                      ],
-                    ),
+        child: DraggableScrollableSheet(
+          initialChildSize: 0.9,
+          // maxChildSize: 0.8,
+          // minChildSize: 0.3,
+          builder: (_, controller) => Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(
+                    getProportionateScreenWidth(16),
                   ),
                 ),
-                Expanded(
-                  child: Padding(
-                    padding: new EdgeInsets.all(
-                      getProportionateScreenWidth(10),
-                    ),
-                    child: SingleChildScrollView(
-                      child: Column(
+              ),
+              // padding: new EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    height: getProportionateScreenHeight(50),
+                    child: Container(
+                      padding: new EdgeInsets.symmetric(
+                          horizontal: getProportionateScreenWidth(10)),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(
+                            getProportionateScreenWidth(16),
+                          ),
+                        ),
+                        color: primaryColor,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          TextInput(
-                            hintText: 'Area Code',
-                            labelText: 'Area Code',
-                            controller: model.areaCodeController,
-                            keyboardType: TextInputType.text,
-
-                            // saved: ,
+                          Text(
+                            'Search Filter',
+                            style: TextStyle(
+                                fontSize: getProportionateScreenWidth(16.0),
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white),
                           ),
-                          SizedBox(
-                            height: getProportionateScreenHeight(15.0),
-                          ),
-                          TextInput(
-                            hintText: 'Pickup Date',
-                            labelText: 'Pickup Date',
-                            controller: model.pickupDateController,
-                            keyboardType: TextInputType.datetime,
-
-                            // saved: ,
-                          ),
-                          SizedBox(
-                            height: getProportionateScreenHeight(15.0),
-                          ),
-                          TextInput(
-                            hintText: 'Delivery Date',
-                            labelText: 'Delivery Date',
-                            controller: model.deliveryDateController,
-                            keyboardType: TextInputType.datetime,
-
-                            // saved: ,
-                          ),
-                          SizedBox(
-                            height: getProportionateScreenHeight(15.0),
-                          ),
-                          TextInput(
-                            hintText: 'Merchant Name',
-                            labelText: 'Merchant Name',
-                            controller: model.merchantNameController,
-                            keyboardType: TextInputType.text,
-
-                            // saved: ,
-                          ),
-                          SizedBox(
-                            height: getProportionateScreenHeight(
-                              15.0,
-                            ),
-                          ),
+                          IconButton(
+                              onPressed: model.navigateBack,
+                              icon: Icon(
+                                Icons.close,
+                                color: Colors.white,
+                                size: getProportionateScreenWidth(24),
+                              ))
                         ],
                       ),
                     ),
                   ),
-                  flex: 12,
-                ),
-                Expanded(
-                  flex: 2,
-                  child: SubmitButton(
-                    textColor: Colors.white,
-                    borderColor: primaryColor,
-                    buttonColor: primaryColor,
-                    onSubmit: () => model.advancedSearch(),
-                    buttonText: 'Search',
+                  Expanded(
+                    child: Padding(
+                      padding: new EdgeInsets.all(
+                        getProportionateScreenWidth(10),
+                      ),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            TextInput(
+                              hintText: 'Area Code',
+                              labelText: 'Area Code',
+                              controller: model.areaCodeController,
+                              keyboardType: TextInputType.text,
+
+                              // saved: ,
+                            ),
+                            SizedBox(
+                              height: getProportionateScreenHeight(15.0),
+                            ),
+                            TextInput(
+                              hintText: 'Pickup Date',
+                              labelText: 'Pickup Date',
+                              controller: model.pickupDateController,
+                              keyboardType: TextInputType.datetime,
+
+                              // saved: ,
+                            ),
+                            SizedBox(
+                              height: getProportionateScreenHeight(15.0),
+                            ),
+                            TextInput(
+                              hintText: 'Delivery Date',
+                              labelText: 'Delivery Date',
+                              controller: model.deliveryDateController,
+                              keyboardType: TextInputType.datetime,
+
+                              // saved: ,
+                            ),
+                            SizedBox(
+                              height: getProportionateScreenHeight(15.0),
+                            ),
+                            TextInput(
+                              hintText: 'Merchant Name',
+                              labelText: 'Merchant Name',
+                              controller: model.merchantNameController,
+                              keyboardType: TextInputType.text,
+
+                              // saved: ,
+                            ),
+                            SizedBox(
+                              height: getProportionateScreenHeight(
+                                15.0,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    flex: 12,
                   ),
-                )
-              ],
-            )),
-      ),
-      model: model);
+                  Expanded(
+                    flex: 2,
+                    child: SubmitButton(
+                      textColor: Colors.white,
+                      borderColor: primaryColor,
+                      buttonColor: primaryColor,
+                      onSubmit: () => model.advancedSearch(),
+                      buttonText: 'Search',
+                    ),
+                  )
+                ],
+              )),
+        ),
+        model: model,
+      );
 
   Widget sortBuildSheet(OrdersViewModel model) => makeDismissible(
-      child: DraggableScrollableSheet(
-        initialChildSize: 0.3,
-        maxChildSize: 0.3,
-        minChildSize: 0.2,
-        builder: (_, controller) => Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(
-                  getProportionateScreenWidth(16),
-                ),
-              ),
-            ),
-            // padding: new EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                SizedBox(
-                  width: double.infinity,
-                  height: getProportionateScreenHeight(50),
-                  child: Container(
-                    padding: new EdgeInsets.symmetric(
-                        horizontal: getProportionateScreenWidth(10)),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(
-                          getProportionateScreenWidth(16),
-                        ),
-                      ),
-                      color: primaryColor,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Please choose a sort option',
-                          style: TextStyle(
-                              fontSize: getProportionateScreenWidth(16.0),
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white),
-                        ),
-                        IconButton(
-                            onPressed: model.navigateBack,
-                            icon: Icon(
-                              Icons.close,
-                              color: Colors.white,
-                              size: getProportionateScreenWidth(24),
-                            ))
-                      ],
-                    ),
+        child: DraggableScrollableSheet(
+          initialChildSize: 0.3,
+          maxChildSize: 0.3,
+          minChildSize: 0.2,
+          builder: (_, controller) => Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(
+                    getProportionateScreenWidth(16),
                   ),
                 ),
-                Expanded(
-                  child: Padding(
-                    padding: new EdgeInsets.all(
-                      getProportionateScreenWidth(10),
-                    ),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
+              ),
+              // padding: new EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    height: getProportionateScreenHeight(50),
+                    child: Container(
+                      padding: new EdgeInsets.symmetric(
+                          horizontal: getProportionateScreenWidth(10)),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(
+                            getProportionateScreenWidth(16),
+                          ),
+                        ),
+                        color: primaryColor,
+                      ),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          GestureDetector(
-                            onTap: () => model.sortOrder('pickupPostalCode'),
-                            child: Container(
-                              margin: new EdgeInsets.only(
-                                  right: getProportionateScreenWidth(10.0)),
-                              padding: new EdgeInsets.symmetric(
-                                  vertical: getProportionateScreenHeight(10.0),
-                                  horizontal:
-                                      getProportionateScreenWidth(15.0)),
-                              decoration: BoxDecoration(
-                                  color: whiteColor,
-                                  borderRadius: BorderRadius.circular(
-                                    getProportionateScreenWidth(10.0),
-                                  ),
-                                  border: Border.all(color: primaryColor)),
-                              child: Text(
-                                'Area Code ',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: getProportionateScreenHeight(14.0),
-                                  color: primaryColor,
-                                ),
-                              ),
-                            ),
+                          Text(
+                            'Please choose a sort option',
+                            style: TextStyle(
+                                fontSize: getProportionateScreenWidth(16.0),
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white),
                           ),
-                          GestureDetector(
-                            onTap: () => model.sortOrder('pickupDate'),
-                            child: Container(
-                              margin: new EdgeInsets.only(
-                                  right: getProportionateScreenWidth(10.0)),
-                              padding: new EdgeInsets.symmetric(
-                                  vertical: getProportionateScreenHeight(10.0),
-                                  horizontal:
-                                      getProportionateScreenWidth(15.0)),
-                              decoration: BoxDecoration(
-                                  color: whiteColor,
-                                  borderRadius: BorderRadius.circular(
-                                    getProportionateScreenWidth(10.0),
-                                  ),
-                                  border: Border.all(color: primaryColor)),
-                              child: Text(
-                                'Pickup Date ',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: getProportionateScreenHeight(14.0),
-                                  color: primaryColor,
-                                ),
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () => model.sortOrder('deliveryDate'),
-                            child: Container(
-                              margin: new EdgeInsets.only(
-                                  right: getProportionateScreenWidth(10.0)),
-                              padding: new EdgeInsets.symmetric(
-                                  vertical: getProportionateScreenHeight(10.0),
-                                  horizontal:
-                                      getProportionateScreenWidth(15.0)),
-                              decoration: BoxDecoration(
-                                  color: whiteColor,
-                                  borderRadius: BorderRadius.circular(
-                                    getProportionateScreenWidth(10.0),
-                                  ),
-                                  border: Border.all(color: primaryColor)),
-                              child: Text(
-                                'Delivery Date ',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: getProportionateScreenHeight(14.0),
-                                  color: primaryColor,
-                                ),
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () => model.sortOrder('merchantName'),
-                            child: Container(
-                              margin: new EdgeInsets.only(
-                                  right: getProportionateScreenWidth(10.0)),
-                              padding: new EdgeInsets.symmetric(
-                                  vertical: getProportionateScreenHeight(10.0),
-                                  horizontal:
-                                      getProportionateScreenWidth(15.0)),
-                              decoration: BoxDecoration(
-                                  color: whiteColor,
-                                  borderRadius: BorderRadius.circular(
-                                    getProportionateScreenWidth(10.0),
-                                  ),
-                                  border: Border.all(color: primaryColor)),
-                              child: Text(
-                                'Merchant Name ',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: getProportionateScreenHeight(14.0),
-                                  color: primaryColor,
-                                ),
-                              ),
-                            ),
-                          ),
+                          IconButton(
+                              onPressed: model.navigateBack,
+                              icon: Icon(
+                                Icons.close,
+                                color: Colors.white,
+                                size: getProportionateScreenWidth(24),
+                              ))
                         ],
                       ),
                     ),
                   ),
-                  flex: 12,
-                ),
-                Expanded(
-                    flex: 2,
-                    child: GestureDetector(
-                      onTap: model.navigateBack,
-                      child: Text(
-                        'Close',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: getProportionateScreenHeight(16.0),
-                          color: primaryColor,
+                  Expanded(
+                    child: Padding(
+                      padding: new EdgeInsets.all(
+                        getProportionateScreenWidth(10),
+                      ),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () => model.sortOrder('pickupPostalCode'),
+                              child: Container(
+                                margin: new EdgeInsets.only(
+                                    right: getProportionateScreenWidth(10.0)),
+                                padding: new EdgeInsets.symmetric(
+                                    vertical:
+                                        getProportionateScreenHeight(10.0),
+                                    horizontal:
+                                        getProportionateScreenWidth(15.0)),
+                                decoration: BoxDecoration(
+                                    color: whiteColor,
+                                    borderRadius: BorderRadius.circular(
+                                      getProportionateScreenWidth(10.0),
+                                    ),
+                                    border: Border.all(color: primaryColor)),
+                                child: Text(
+                                  'Area Code ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize:
+                                        getProportionateScreenHeight(14.0),
+                                    color: primaryColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () => model.sortOrder('pickupDate'),
+                              child: Container(
+                                margin: new EdgeInsets.only(
+                                    right: getProportionateScreenWidth(10.0)),
+                                padding: new EdgeInsets.symmetric(
+                                    vertical:
+                                        getProportionateScreenHeight(10.0),
+                                    horizontal:
+                                        getProportionateScreenWidth(15.0)),
+                                decoration: BoxDecoration(
+                                    color: whiteColor,
+                                    borderRadius: BorderRadius.circular(
+                                      getProportionateScreenWidth(10.0),
+                                    ),
+                                    border: Border.all(color: primaryColor)),
+                                child: Text(
+                                  'Pickup Date ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize:
+                                        getProportionateScreenHeight(14.0),
+                                    color: primaryColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () => model.sortOrder('deliveryDate'),
+                              child: Container(
+                                margin: new EdgeInsets.only(
+                                    right: getProportionateScreenWidth(10.0)),
+                                padding: new EdgeInsets.symmetric(
+                                    vertical:
+                                        getProportionateScreenHeight(10.0),
+                                    horizontal:
+                                        getProportionateScreenWidth(15.0)),
+                                decoration: BoxDecoration(
+                                    color: whiteColor,
+                                    borderRadius: BorderRadius.circular(
+                                      getProportionateScreenWidth(10.0),
+                                    ),
+                                    border: Border.all(color: primaryColor)),
+                                child: Text(
+                                  'Delivery Date ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize:
+                                        getProportionateScreenHeight(14.0),
+                                    color: primaryColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () => model.sortOrder('merchantName'),
+                              child: Container(
+                                margin: new EdgeInsets.only(
+                                    right: getProportionateScreenWidth(10.0)),
+                                padding: new EdgeInsets.symmetric(
+                                    vertical:
+                                        getProportionateScreenHeight(10.0),
+                                    horizontal:
+                                        getProportionateScreenWidth(15.0)),
+                                decoration: BoxDecoration(
+                                    color: whiteColor,
+                                    borderRadius: BorderRadius.circular(
+                                      getProportionateScreenWidth(10.0),
+                                    ),
+                                    border: Border.all(color: primaryColor)),
+                                child: Text(
+                                  'Merchant Name ',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize:
+                                        getProportionateScreenHeight(14.0),
+                                    color: primaryColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ))
-              ],
-            )),
-      ),
-      model: model);
+                    ),
+                    flex: 12,
+                  ),
+                  Expanded(
+                      flex: 2,
+                      child: GestureDetector(
+                        onTap: model.navigateBack,
+                        child: Text(
+                          'Close',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: getProportionateScreenHeight(16.0),
+                            color: primaryColor,
+                          ),
+                        ),
+                      ))
+                ],
+              )),
+        ),
+        model: model,
+      );
 }

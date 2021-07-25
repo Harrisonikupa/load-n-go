@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:loadngo/ui/responsiveness/sizing.config.dart';
 import 'package:loadngo/ui/styles/colors.dart';
-import 'package:loadngo/ui/views/deliveries/deliveries.view.dart';
 import 'package:loadngo/ui/views/home/home.model.dart';
+import 'package:loadngo/ui/views/optimized-route-view/optimized-route.view.dart';
 import 'package:loadngo/ui/views/orders/orders.view.dart';
 import 'package:stacked/stacked.dart';
 
@@ -59,7 +59,7 @@ class HomeView extends StatelessWidget {
       case 0:
         return OrdersView();
       case 1:
-        return DeliveriesView();
+        return OptimizedRouteView();
       default:
         return OrdersView();
     }

@@ -27,6 +27,7 @@ class OrderInformationViewModel extends BaseViewModel {
   var deliveryDateController = new TextEditingController();
   var deliveryAddressController = new TextEditingController();
   var deliveryPostalCodeController = new TextEditingController();
+  var emailAddressController = new TextEditingController();
   Order orderInfo = new Order();
   OrderInformationViewModel(Order? orderInfo) {
     this.orderInfo = orderInfo!;
@@ -44,7 +45,7 @@ class OrderInformationViewModel extends BaseViewModel {
     pickupPostalCodeController.text = orderInfo.pickupPostalCode!;
     deliveryDateController.text = orderInfo.deliveryDate!;
     deliveryAddressController.text = orderInfo.deliveryAddress!;
-    deliveryPostalCodeController.text = orderInfo.deliveryPostalCode!;
+    emailAddressController.text = orderInfo.customerEmail!;
   }
 
   void navigateBack() => navigationService.back();
@@ -83,9 +84,13 @@ class OrderInformationViewModel extends BaseViewModel {
     orderInfo.deliveryDate = deliveryDateController.text;
     orderInfo.deliveryAddress = deliveryAddressController.text;
     orderInfo.deliveryPostalCode = deliveryPostalCodeController.text;
+    orderInfo.customerEmail = emailAddressController.text;
 
     setBusy(true);
+    print('we here');
+
     await _firestoreService.updateOrder(orderInfo);
+
     var dialogResponse = await _dialogService.showDialog(
         title: 'Update Complete', description: 'Your update was successful');
     if (dialogResponse!.confirmed) {

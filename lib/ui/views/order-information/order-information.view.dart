@@ -166,6 +166,21 @@ class OrderInformationView extends StatelessWidget {
                             8.0,
                           ),
                         ),
+                        Text('Email Address', style: labelTextStyle),
+                        SizedBox(
+                          height: getProportionateScreenHeight(
+                            2.0,
+                          ),
+                        ),
+                        Text(
+                          '${orderInfo!.customerEmail}',
+                          style: labelValueTextStyle,
+                        ),
+                        SizedBox(
+                          height: getProportionateScreenHeight(
+                            8.0,
+                          ),
+                        ),
                         Text('Company', style: labelTextStyle),
                         SizedBox(
                           height: getProportionateScreenHeight(
@@ -221,7 +236,7 @@ class OrderInformationView extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          '${orderInfo!.orderNumber}e',
+                          '${orderInfo!.orderNumber}',
                           style: labelValueTextStyle,
                         ),
                         SizedBox(
@@ -568,6 +583,15 @@ class OrderInformationView extends StatelessWidget {
                                 TextInput(
                                   labelText: 'Customer Phone Number',
                                   controller: model.phoneNumberController,
+                                ),
+                                SizedBox(
+                                  height: getProportionateScreenHeight(
+                                    20.0,
+                                  ),
+                                ),
+                                TextInput(
+                                  labelText: 'Customer Email Address',
+                                  controller: model.emailAddressController,
                                 ),
                                 SizedBox(
                                   height: getProportionateScreenHeight(

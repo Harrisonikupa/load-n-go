@@ -150,12 +150,16 @@ class FirestoreService {
 
   Future updateOrder(Order order) async {
     try {
+      print('message33');
+
       await _orderCollectionReference
           .doc(order.documentId)
           .update(order.toJson());
+      print('message44');
     } catch (e) {
       // TODO: Find or create a way to repeat error handling without so much repeated code
       if (e is PlatformException) {
+        print('messageqq1');
         print(e.message);
         return e.message;
       }

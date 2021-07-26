@@ -2,12 +2,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:loadngo/app/app.locator.dart';
 import 'package:loadngo/app/app.router.dart';
+import 'package:loadngo/shared/storage/shared-preferences.storage.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   setupLocator();
+  await DataStorage.init();
   runApp(MyApp());
 }
 

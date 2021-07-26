@@ -26,7 +26,7 @@ class JobDetails {
 
   ModelOptions? modelOptions;
   List<Consignment>? consignments;
-  List<Location>? locations;
+  List<Locations>? locations;
   List<Vehicle>? vehicles;
   List<Priority>? priorities;
 
@@ -34,8 +34,8 @@ class JobDetails {
         modelOptions: ModelOptions.fromMap(json["model_options"]),
         consignments: List<Consignment>.from(
             json["consignments"].map((x) => Consignment.fromMap(x))),
-        locations: List<Location>.from(
-            json["locations"].map((x) => Location.fromMap(x))),
+        locations: List<Locations>.from(
+            json["locations"].map((x) => Locations.fromMap(x))),
         vehicles:
             List<Vehicle>.from(json["vehicles"].map((x) => Vehicle.fromMap(x))),
         priorities: List<Priority>.from(

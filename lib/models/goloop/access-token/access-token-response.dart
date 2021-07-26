@@ -20,8 +20,8 @@ class AccessTokenResponse {
   String? tokenType;
   int? expiresIn;
   String? userName;
-  DateTime? issued;
-  DateTime? expires;
+  String? issued;
+  String? expires;
 
   factory AccessTokenResponse.fromMap(Map<String, dynamic> json) =>
       AccessTokenResponse(
@@ -29,8 +29,8 @@ class AccessTokenResponse {
         tokenType: json["token_type"],
         expiresIn: json["expires_in"],
         userName: json["userName"],
-        issued: DateTime.parse(json[".issued"]),
-        expires: DateTime.parse(json[".expires"]),
+        issued: json[".issued"],
+        expires: json[".expires"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -38,7 +38,7 @@ class AccessTokenResponse {
         "token_type": tokenType,
         "expires_in": expiresIn,
         "userName": userName,
-        ".issued": issued!.toIso8601String(),
-        ".expires": expires!.toIso8601String(),
+        ".issued": issued,
+        ".expires": expires,
       };
 }

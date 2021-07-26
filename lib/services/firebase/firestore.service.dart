@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:loadngo/models/order-with-location.model.dart';
 import 'package:loadngo/models/orders.model.dart';
 
 class FirestoreService {
@@ -56,7 +57,7 @@ class FirestoreService {
       var orderDocumentSnapshot = await _orderCollectionReference.get();
       if (orderDocumentSnapshot.docs.isNotEmpty) {
         return orderDocumentSnapshot.docs
-            .map((snapshot) => Order.fromJson(
+            .map((snapshot) => OrderWithLocation.fromJson(
                 snapshot.data() as Map<String, dynamic>, snapshot.id))
             .where((mappedItem) => mappedItem.orderNumber != null)
             .toList();

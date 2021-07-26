@@ -6,8 +6,8 @@ class AccessTokenRequest {
   });
 
   String? username;
-  double? password;
-  double? grantType;
+  String? password;
+  String? grantType;
 
   factory AccessTokenRequest.fromMap(Map<String, dynamic> json) =>
       AccessTokenRequest(

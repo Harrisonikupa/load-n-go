@@ -22,8 +22,8 @@ class Vehicle {
   String? type;
   String? locationStartId;
   String? locationEndId;
-  DateTime? availableFromUtc;
-  DateTime? availableUntilUtc;
+  String? availableFromUtc;
+  String? availableUntilUtc;
   List<Container>? containers;
   List<String>? fixedFeatures;
   VisitableLocationsForFeature? visitableLocationsForFeature;
@@ -37,8 +37,8 @@ class Vehicle {
         type: json["type"],
         locationStartId: json["location_start_id"],
         locationEndId: json["location_end_id"],
-        availableFromUtc: DateTime.parse(json["available_from_utc"]),
-        availableUntilUtc: DateTime.parse(json["available_until_utc"]),
+        availableFromUtc: json["available_from_utc"],
+        availableUntilUtc: json["available_until_utc"],
         containers: List<Container>.from(
             json["containers"].map((x) => Container.fromMap(x))),
         fixedFeatures: List<String>.from(json["fixed_features"].map((x) => x)),
@@ -55,8 +55,8 @@ class Vehicle {
         "type": type,
         "location_start_id": locationStartId,
         "location_end_id": locationEndId,
-        "available_from_utc": availableFromUtc!.toIso8601String(),
-        "available_until_utc": availableUntilUtc!.toIso8601String(),
+        "available_from_utc": availableFromUtc,
+        "available_until_utc": availableUntilUtc,
         "containers": List<dynamic>.from(containers!.map((x) => x.toMap())),
         "fixed_features": List<dynamic>.from(fixedFeatures!.map((x) => x)),
         "visitable_locations_for_feature":

@@ -9,4 +9,6 @@ class Secrets {
   static const goloop_username = 'harrisikupa01@gmail.com';
   static const goloop_password = '@Password001';
   static const goloop_grant_type = 'password';
+
+  static const date_suffix = 'T08:00:00Z';
 }

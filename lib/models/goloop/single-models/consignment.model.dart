@@ -25,12 +25,12 @@ class Consignment {
   String? locationIdFrom;
   String? locationIdTo;
   String? priority;
-  DateTime? pickupTimeStartUtc;
-  DateTime? pickupTimeEndUtc;
+  String? pickupTimeStartUtc;
+  String? pickupTimeEndUtc;
   int? pickupServiceTimeMinutes;
   String? pickupTimeWindowConstraint;
-  DateTime? deliverTimeStartUtc;
-  DateTime? deliverTimeEndUtc;
+  String? deliverTimeStartUtc;
+  String? deliverTimeEndUtc;
   int? deliverServiceTimeMinutes;
   String? deliverTimeWindowConstraint;
   String? vehicleContainerTypeRequired;
@@ -44,12 +44,12 @@ class Consignment {
         locationIdFrom: json["location_id_from"],
         locationIdTo: json["location_id_to"],
         priority: json["priority"],
-        pickupTimeStartUtc: DateTime.parse(json["pickup_time_start_utc"]),
-        pickupTimeEndUtc: DateTime.parse(json["pickup_time_end_utc"]),
+        pickupTimeStartUtc: json["pickup_time_start_utc"],
+        pickupTimeEndUtc: json["pickup_time_end_utc"],
         pickupServiceTimeMinutes: json["pickup_service_time_minutes"],
         pickupTimeWindowConstraint: json["pickup_time_window_constraint"],
-        deliverTimeStartUtc: DateTime.parse(json["deliver_time_start_utc"]),
-        deliverTimeEndUtc: DateTime.parse(json["deliver_time_end_utc"]),
+        deliverTimeStartUtc: json["deliver_time_start_utc"],
+        deliverTimeEndUtc: json["deliver_time_end_utc"],
         deliverServiceTimeMinutes: json["deliver_service_time_minutes"],
         deliverTimeWindowConstraint: json["deliver_time_window_constraint"],
         vehicleContainerTypeRequired: json["vehicle_container_type_required"],
@@ -68,12 +68,12 @@ class Consignment {
         "location_id_from": locationIdFrom,
         "location_id_to": locationIdTo,
         "priority": priority,
-        "pickup_time_start_utc": pickupTimeStartUtc!.toIso8601String(),
-        "pickup_time_end_utc": pickupTimeEndUtc!.toIso8601String(),
+        "pickup_time_start_utc": pickupTimeStartUtc,
+        "pickup_time_end_utc": pickupTimeEndUtc,
         "pickup_service_time_minutes": pickupServiceTimeMinutes,
         "pickup_time_window_constraint": pickupTimeWindowConstraint,
-        "deliver_time_start_utc": deliverTimeStartUtc!.toIso8601String(),
-        "deliver_time_end_utc": deliverTimeEndUtc!.toIso8601String(),
+        "deliver_time_start_utc": deliverTimeStartUtc,
+        "deliver_time_end_utc": deliverTimeEndUtc,
         "deliver_service_time_minutes": deliverServiceTimeMinutes,
         "deliver_time_window_constraint": deliverTimeWindowConstraint,
         "vehicle_container_type_required": vehicleContainerTypeRequired,

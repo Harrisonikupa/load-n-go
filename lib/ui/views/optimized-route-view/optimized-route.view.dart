@@ -11,6 +11,7 @@ class OptimizedRouteView extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return ViewModelBuilder<OptimizedRouteViewModel>.reactive(
+      onModelReady: (model) => model.modelIsReady(),
       builder: (context, model, child) => SafeArea(
         child: Scaffold(
           backgroundColor: Colors.white,
@@ -26,7 +27,7 @@ class OptimizedRouteView extends StatelessWidget {
               ),
             ),
             // onPressed: () => {},
-            onPressed: () => {},
+            onPressed: () => model.createJob(),
           ),
           body: Padding(
             padding: new EdgeInsets.all(

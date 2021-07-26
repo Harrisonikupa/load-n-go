@@ -55,10 +55,10 @@ class OrdersViewModel extends BaseViewModel {
     newOrder.orderDescription = '1 Carton of water';
     newOrder.weightOfOrder = '50g';
     newOrder.quantity = 11;
-    newOrder.pickupDate = '10-01-2021';
+    newOrder.pickupDate = '2021-01-11';
     newOrder.pickupAddress = '123 Raffles Place';
     newOrder.pickupPostalCode = '101111';
-    newOrder.deliveryDate = '11-01-2021';
+    newOrder.deliveryDate = '2021-01-11';
     newOrder.deliveryAddress = '123 City Hall';
     newOrder.deliveryPostalCode = '546090';
     newOrder.customerFirstName = 'Jamie';
@@ -175,22 +175,6 @@ class OrdersViewModel extends BaseViewModel {
       });
       selectedOrders.clear();
       setBusy(false);
-    }
-  }
-
-  // Fetch orders
-  Future fetchOrders() async {
-    setBusy(true);
-    var orderResults = await _firestoreService.getOrdersWithoutListeners();
-    setBusy(false);
-
-    if (orderResults is List<Order>) {
-      _orders = orderResults;
-      print(_orders.length);
-      notifyListeners();
-    } else {
-      _dialogService.showDialog(
-          title: 'Order update failed', description: orderResults);
     }
   }
 

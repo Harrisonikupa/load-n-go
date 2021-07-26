@@ -1,5 +1,5 @@
-class Location {
-  Location({
+class Locations {
+  Locations({
     this.id,
     this.latitude,
     this.longitude,
@@ -14,19 +14,19 @@ class Location {
   String? id;
   String? latitude;
   String? longitude;
-  DateTime? availableFromUtc;
-  DateTime? availableUntilUtc;
+  String? availableFromUtc;
+  String? availableUntilUtc;
   List<String>? vehiclesAllowed;
   List<String>? vehicleTypesAllowed;
   List<String>? vehicleTypesRefused;
   List<String>? vehicleFeaturesRequired;
 
-  factory Location.fromMap(Map<String, dynamic> json) => Location(
+  factory Locations.fromMap(Map<String, dynamic> json) => Locations(
         id: json["id"],
         latitude: json["latitude"],
         longitude: json["longitude"],
-        availableFromUtc: DateTime.parse(json["available_from_utc"]),
-        availableUntilUtc: DateTime.parse(json["available_until_utc"]),
+        availableFromUtc: json["available_from_utc"],
+        availableUntilUtc: json["available_until_utc"],
         vehiclesAllowed:
             List<String>.from(json["vehicles_allowed"].map((x) => x)),
         vehicleTypesAllowed:
@@ -41,8 +41,8 @@ class Location {
         "id": id,
         "latitude": latitude,
         "longitude": longitude,
-        "available_from_utc": availableFromUtc!.toIso8601String(),
-        "available_until_utc": availableUntilUtc!.toIso8601String(),
+        "available_from_utc": availableFromUtc,
+        "available_until_utc": availableUntilUtc,
         "vehicles_allowed": List<dynamic>.from(vehiclesAllowed!.map((x) => x)),
         "vehicle_types_allowed":
             List<dynamic>.from(vehicleTypesAllowed!.map((x) => x)),

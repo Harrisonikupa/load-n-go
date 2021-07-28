@@ -35,10 +35,13 @@ class Consignment {
   String? deliverTimeWindowConstraint;
   String? vehicleContainerTypeRequired;
   List<CapacitiesUsed>? capacitiesUsed;
-  List<String>? vehicleFixedFeaturesRequired;
-  List<String>? vehiclesAllowed;
-  List<String>? vehiclesRefused;
+  Null vehicleFixedFeaturesRequired;
+  Null vehiclesAllowed;
+  Null vehiclesRefused;
 
+  // List<String> vehicleFixedFeaturesRequired;
+  // List<String>? vehiclesAllowed;
+  // List<String>? vehiclesRefused;
   factory Consignment.fromMap(Map<String, dynamic> json) => Consignment(
         id: json["id"],
         locationIdFrom: json["location_id_from"],
@@ -55,12 +58,15 @@ class Consignment {
         vehicleContainerTypeRequired: json["vehicle_container_type_required"],
         capacitiesUsed: List<CapacitiesUsed>.from(
             json["capacities_used"].map((x) => CapacitiesUsed.fromMap(x))),
-        vehicleFixedFeaturesRequired: List<String>.from(
-            json["vehicle_fixed_features_required"].map((x) => x)),
-        vehiclesAllowed:
-            List<String>.from(json["vehicles_allowed"].map((x) => x)),
-        vehiclesRefused:
-            List<String>.from(json["vehicles_refused"].map((x) => x)),
+        vehicleFixedFeaturesRequired: json["vehicle_fixed_features_required"],
+        vehiclesAllowed: json["vehicles_allowed"],
+        vehiclesRefused: json["vehicles_refused"],
+        // vehicleFixedFeaturesRequired: List<String>.from(
+        //     json["vehicle_fixed_features_required"].map((x) => x)),
+        // vehiclesAllowed:
+        // List<String>.from(json["vehicles_allowed"].map((x) => x)),
+        // vehiclesRefused:
+        // List<String>.from(json["vehicles_refused"].map((x) => x)),
       );
 
   Map<String, dynamic> toMap() => {
@@ -79,9 +85,8 @@ class Consignment {
         "vehicle_container_type_required": vehicleContainerTypeRequired,
         "capacities_used":
             List<dynamic>.from(capacitiesUsed!.map((x) => x.toMap())),
-        "vehicle_fixed_features_required":
-            List<dynamic>.from(vehicleFixedFeaturesRequired!.map((x) => x)),
-        "vehicles_allowed": List<dynamic>.from(vehiclesAllowed!.map((x) => x)),
-        "vehicles_refused": List<dynamic>.from(vehiclesRefused!.map((x) => x)),
+        "vehicle_fixed_features_required": vehicleFixedFeaturesRequired,
+        "vehicles_allowed": vehiclesAllowed,
+        "vehicles_refused": vehiclesRefused,
       };
 }

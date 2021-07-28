@@ -5,14 +5,20 @@ import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:loadngo/app/app.locator.dart';
 import 'package:loadngo/app/app.router.dart';
+import 'package:loadngo/models/goloop/access-token/access-token-request.model.dart';
+import 'package:loadngo/models/goloop/access-token/access-token-response.dart';
 import 'package:loadngo/models/orders.model.dart';
+import 'package:loadngo/services/Thirdparty/goloop.service.dart';
 import 'package:loadngo/services/firebase/firestore.service.dart';
+import 'package:loadngo/shared/secrets.dart';
+import 'package:loadngo/shared/storage/shared-preferences.storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class OrdersViewModel extends BaseViewModel {
   final navigationService = locator<NavigationService>();
+  final GoloopService _goloopService = locator<GoloopService>();
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final DialogService _dialogService = locator<DialogService>();
   void navigateBack() => navigationService.back();
@@ -97,6 +103,10 @@ class OrdersViewModel extends BaseViewModel {
     });
   }
 
+  modelIsReady() async {
+    await getAuthorizationToken();
+    listenToOrders();
+  }
   // void listenToSortedOrders(fieldName) {
   //   setBusy(true);
   //   _firestoreService.sortOrderListByFieldName(fieldName).listen((ordersData) {
@@ -341,6 +351,19 @@ class OrdersViewModel extends BaseViewModel {
     if (dialogResponse!.confirmed) {
       selectedOrders.clear();
       notifyListeners();
+    }
+  }
+
+  getAuthorizationToken() async {
+    // Get authorization to goloop api
+    AccessTokenRequest request = new AccessTokenRequest();
+    request.username = Secrets.goloop_username;
+    request.password = Secrets.goloop_password;
+    request.grantType = Secrets.goloop_grant_type;
+    var authorizationResponse = await _goloopService.getAccessToken(request);
+
+    if (authorizationResponse is AccessTokenResponse) {
+      DataStorage.setAccessToken(authorizationResponse);
     }
   }
 }

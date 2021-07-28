@@ -16,7 +16,7 @@ class OrdersView extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return ViewModelBuilder<OrdersViewModel>.reactive(
-      onModelReady: (model) => model.listenToOrders(),
+      onModelReady: (model) => model.modelIsReady(),
       builder: (context, model, child) => SafeArea(
         child: Scaffold(
           backgroundColor: Colors.white,

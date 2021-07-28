@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:loadngo/app/app.locator.dart';
 import 'package:loadngo/models/goloop/access-token/access-token-request.model.dart';
 import 'package:loadngo/models/goloop/access-token/access-token-response.dart';
-import 'package:loadngo/models/goloop/job/job-details.model.dart';
 import 'package:loadngo/models/goloop/job/submitted-job.model.dart';
 import 'package:loadngo/shared/secrets.dart';
 import 'package:loadngo/shared/storage/shared-preferences.storage.dart';
@@ -14,7 +13,7 @@ class GoloopService {
   var client = new http.Client();
   DialogService _dialogService = locator<DialogService>();
   final headers = <String, String>{};
-
+  AccessTokenResponse accessToken = DataStorage.getAccessToken();
   // Get access token to make requests
   Future getAccessToken(AccessTokenRequest request) async {
     AccessTokenResponse responseBody = new AccessTokenResponse();
@@ -40,21 +39,19 @@ class GoloopService {
   }
 
   // Post a new Job
-  Future postJob(JobDetails request) async {
+  Future postJob(request) async {
     headers['Content-Type'] = 'application/json';
-    headers['Authorization'] = 'Bearer ${DataStorage.getAccessToken()}';
-
-    print('Started');
+    headers['Authorization'] = 'Bearer ${accessToken.accessToken}';
     var submittedJobResponse = new SubmittedJob();
     var response = await client.post(
         Uri.parse('${Secrets.goloop_base_url}api/v1/solver/job'),
-        body: jsonEncode(request.toMap()));
+        body: jsonEncode(request),
+        headers: headers);
 
     var parsed = jsonDecode(response.body);
-    print(response.statusCode);
-    print(response.body);
 
     if (response.statusCode == 200) {
+      print('${response.body} >>>>>>>>>>>>>>>>>>>>>> it passed');
       if (parsed is SubmittedJob) {
         submittedJobResponse = parsed;
       }
@@ -64,5 +61,21 @@ class GoloopService {
       throw Exception(parsed);
     }
     return submittedJobResponse;
+  }
+
+  Future<List<SubmittedJob>> listOfJobs() async {
+    headers['Content-Type'] = 'application/json';
+    headers['Authorization'] = 'Bearer ${accessToken.accessToken}';
+    var jobs = <SubmittedJob>[];
+
+    var response = await client.get(
+        Uri.parse('${Secrets.goloop_base_url}api/v1/solver/job'),
+        headers: headers);
+    var parsed = json.decode(response.body);
+    for (var job in parsed) {
+      jobs.add(SubmittedJob.fromMap(job));
+    }
+
+    return jobs;
   }
 }

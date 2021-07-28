@@ -15,7 +15,7 @@ class SubmittedJob {
     this.relUri,
   });
 
-  String? jobId;
+  int? jobId;
   String? relUri;
 
   factory SubmittedJob.fromMap(Map<String, dynamic> json) => SubmittedJob(

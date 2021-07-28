@@ -1,5 +1,4 @@
 import 'package:loadngo/models/goloop/single-models/container.model.dart';
-import 'package:loadngo/models/goloop/single-models/visitable-locations-for-features.model.dart';
 
 class Vehicle {
   Vehicle({
@@ -25,8 +24,8 @@ class Vehicle {
   String? availableFromUtc;
   String? availableUntilUtc;
   List<Container>? containers;
-  List<String>? fixedFeatures;
-  VisitableLocationsForFeature? visitableLocationsForFeature;
+  Null fixedFeatures;
+  Null visitableLocationsForFeature;
   int? pricePerDeliveryCents;
   int? pricePerKmCents;
   int? pricePerHourCents;
@@ -41,9 +40,8 @@ class Vehicle {
         availableUntilUtc: json["available_until_utc"],
         containers: List<Container>.from(
             json["containers"].map((x) => Container.fromMap(x))),
-        fixedFeatures: List<String>.from(json["fixed_features"].map((x) => x)),
-        visitableLocationsForFeature: VisitableLocationsForFeature.fromMap(
-            json["visitable_locations_for_feature"]),
+        fixedFeatures: json["fixed_features"],
+        visitableLocationsForFeature: json["visitable_locations_for_feature"],
         pricePerDeliveryCents: json["price_per_delivery_cents"],
         pricePerKmCents: json["price_per_km_cents"],
         pricePerHourCents: json["price_per_hour_cents"],
@@ -58,9 +56,8 @@ class Vehicle {
         "available_from_utc": availableFromUtc,
         "available_until_utc": availableUntilUtc,
         "containers": List<dynamic>.from(containers!.map((x) => x.toMap())),
-        "fixed_features": List<dynamic>.from(fixedFeatures!.map((x) => x)),
-        "visitable_locations_for_feature":
-            visitableLocationsForFeature!.toMap(),
+        "fixed_features": fixedFeatures,
+        "visitable_locations_for_feature": visitableLocationsForFeature,
         "price_per_delivery_cents": pricePerDeliveryCents,
         "price_per_km_cents": pricePerKmCents,
         "price_per_hour_cents": pricePerHourCents,

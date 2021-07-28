@@ -14,12 +14,12 @@ class Locations {
   String? id;
   String? latitude;
   String? longitude;
-  String? availableFromUtc;
-  String? availableUntilUtc;
-  List<String>? vehiclesAllowed;
-  List<String>? vehicleTypesAllowed;
-  List<String>? vehicleTypesRefused;
-  List<String>? vehicleFeaturesRequired;
+  Null availableFromUtc;
+  Null availableUntilUtc;
+  Null vehiclesAllowed;
+  Null vehicleTypesAllowed;
+  Null vehicleTypesRefused;
+  Null vehicleFeaturesRequired;
 
   factory Locations.fromMap(Map<String, dynamic> json) => Locations(
         id: json["id"],
@@ -27,14 +27,10 @@ class Locations {
         longitude: json["longitude"],
         availableFromUtc: json["available_from_utc"],
         availableUntilUtc: json["available_until_utc"],
-        vehiclesAllowed:
-            List<String>.from(json["vehicles_allowed"].map((x) => x)),
-        vehicleTypesAllowed:
-            List<String>.from(json["vehicle_types_allowed"].map((x) => x)),
-        vehicleTypesRefused:
-            List<String>.from(json["vehicle_types_refused"].map((x) => x)),
-        vehicleFeaturesRequired:
-            List<String>.from(json["vehicle_features_required"].map((x) => x)),
+        vehiclesAllowed: json["vehicles_allowed"],
+        vehicleTypesAllowed: json["vehicle_types_allowed"],
+        vehicleTypesRefused: json["vehicle_types_refused"],
+        vehicleFeaturesRequired: json["vehicle_features_required"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -43,12 +39,9 @@ class Locations {
         "longitude": longitude,
         "available_from_utc": availableFromUtc,
         "available_until_utc": availableUntilUtc,
-        "vehicles_allowed": List<dynamic>.from(vehiclesAllowed!.map((x) => x)),
-        "vehicle_types_allowed":
-            List<dynamic>.from(vehicleTypesAllowed!.map((x) => x)),
-        "vehicle_types_refused":
-            List<dynamic>.from(vehicleTypesRefused!.map((x) => x)),
-        "vehicle_features_required":
-            List<dynamic>.from(vehicleFeaturesRequired!.map((x) => x)),
+        "vehicles_allowed": vehiclesAllowed,
+        "vehicle_types_allowed": vehicleTypesAllowed,
+        "vehicle_types_refused": vehicleTypesRefused,
+        "vehicle_features_required": vehicleFeaturesRequired,
       };
 }

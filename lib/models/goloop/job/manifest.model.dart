@@ -18,7 +18,7 @@ class Manifest {
     this.status,
   });
 
-  List<String>? droppedConsignments;
+  dynamic droppedConsignments;
   List<ManifestElement>? manifest;
   ManifestStatus? status;
 

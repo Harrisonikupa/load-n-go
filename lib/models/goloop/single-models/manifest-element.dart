@@ -1,5 +1,3 @@
-import 'package:loadngo/models/goloop/single-models/route.model.dart';
-
 class ManifestElement {
   ManifestElement({
     this.consignments,
@@ -8,22 +6,22 @@ class ManifestElement {
     this.route,
   });
 
-  List<String>? consignments;
-  int? distanceTotalMetres;
+  dynamic consignments;
+  dynamic distanceTotalMetres;
   String? vehicle;
-  List<Route>? route;
+  dynamic route;
 
   factory ManifestElement.fromMap(Map<String, dynamic> json) => ManifestElement(
-        consignments: List<String>.from(json["consignments"].map((x) => x)),
+        consignments: json["consignments"],
         distanceTotalMetres: json["distance_total_metres"],
         vehicle: json["vehicle"],
-        route: List<Route>.from(json["route"].map((x) => Route.fromMap(x))),
+        route: json["route"],
       );
 
   Map<String, dynamic> toMap() => {
-        "consignments": List<dynamic>.from(consignments!.map((x) => x)),
+        "consignments": consignments,
         "distance_total_metres": distanceTotalMetres,
         "vehicle": vehicle,
-        "route": List<dynamic>.from(route!.map((x) => x.toMap())),
+        "route": route,
       };
 }

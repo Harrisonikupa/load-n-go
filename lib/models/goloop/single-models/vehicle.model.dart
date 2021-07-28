@@ -8,6 +8,9 @@ class Vehicle {
     this.locationEndId,
     this.availableFromUtc,
     this.availableUntilUtc,
+    this.breakDurationMinutes,
+    this.breakTimeWindowStart,
+    this.breakTimeWindowEnd,
     this.containers,
     this.fixedFeatures,
     this.visitableLocationsForFeature,
@@ -22,6 +25,9 @@ class Vehicle {
   String? locationStartId;
   String? locationEndId;
   String? availableFromUtc;
+  int? breakDurationMinutes;
+  String? breakTimeWindowStart;
+  String? breakTimeWindowEnd;
   String? availableUntilUtc;
   List<Container>? containers;
   Null fixedFeatures;
@@ -38,8 +44,14 @@ class Vehicle {
         locationEndId: json["location_end_id"],
         availableFromUtc: json["available_from_utc"],
         availableUntilUtc: json["available_until_utc"],
+        breakDurationMinutes: json["break_duration_minutes"],
+        breakTimeWindowStart: json["break_time_window_start"],
+        breakTimeWindowEnd: json["break_time_window_end"],
         containers: List<Container>.from(
-            json["containers"].map((x) => Container.fromMap(x))),
+          json["containers"].map(
+            (x) => Container.fromMap(x),
+          ),
+        ),
         fixedFeatures: json["fixed_features"],
         visitableLocationsForFeature: json["visitable_locations_for_feature"],
         pricePerDeliveryCents: json["price_per_delivery_cents"],
@@ -55,6 +67,9 @@ class Vehicle {
         "location_end_id": locationEndId,
         "available_from_utc": availableFromUtc,
         "available_until_utc": availableUntilUtc,
+        "break_duration_minutes": breakDurationMinutes,
+        "break_time_window_start": breakTimeWindowStart,
+        "break_time_window_end": breakTimeWindowEnd,
         "containers": List<dynamic>.from(containers!.map((x) => x.toMap())),
         "fixed_features": fixedFeatures,
         "visitable_locations_for_feature": visitableLocationsForFeature,

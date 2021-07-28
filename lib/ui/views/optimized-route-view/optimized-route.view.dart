@@ -58,16 +58,44 @@ class OptimizedRouteView extends StatelessWidget {
                   height: getProportionateScreenHeight(15.0),
                 ),
                 Expanded(
-                  child: ListView(
-                    children: [
-                      Container(
-                        color: Colors.red,
+                    child: ListView.builder(
+                  itemCount: model.jobs.length,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () => model.getSolution(index),
+                      child: Container(
                         width: double.infinity,
-                        height: 150.0,
+                        height: getProportionateScreenWidth(60),
+                        decoration: BoxDecoration(
+                          color: whiteColor,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                                offset: Offset(0, 3),
+                                color: Color(0xFF35B8BE),
+                                blurRadius: 8.0)
+                          ],
+                        ),
+                        margin: new EdgeInsets.all(
+                          getProportionateScreenWidth(10),
+                        ),
+                        padding:
+                            new EdgeInsets.all(getProportionateScreenWidth(10)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Job ID: ${model.jobs[index].jobId}',
+                              style: TextStyle(
+                                  fontSize: getProportionateScreenWidth(18), fontWeight: FontWeight.w600,),
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
-                  ),
-                ),
+                    );
+                  },
+                )),
               ],
             ),
           ),

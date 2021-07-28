@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'package:geocoding/geocoding.dart';
 import 'package:loadngo/app/app.locator.dart';
 import 'package:loadngo/models/goloop/job/job-details.model.dart';
+import 'package:loadngo/models/goloop/job/job-solution.dart';
+import 'package:loadngo/models/goloop/job/job-status.model.dart';
+import 'package:loadngo/models/goloop/job/manifest.model.dart';
 import 'package:loadngo/models/goloop/job/submitted-job.model.dart';
 import 'package:loadngo/models/goloop/single-models/capacity-used.model.dart';
 import 'package:loadngo/models/goloop/single-models/capacity.model.dart';
@@ -107,7 +110,7 @@ class OptimizedRouteViewModel extends BaseViewModel {
         await locationFromAddress(refinedOrders[0].pickupPostalCode!);
 
     Future.delayed(
-        Duration(seconds: 2),
+        Duration(seconds: 1),
         () => {
               depotLocation.forEach((location) {
                 depotLongitude = location.longitude;
@@ -175,6 +178,11 @@ class OptimizedRouteViewModel extends BaseViewModel {
     vehicle.type = 'General';
     vehicle.locationStartId = depotLongLat.id;
     vehicle.locationEndId = depotLongLat.id;
+    vehicle.breakDurationMinutes = 0;
+    vehicle.breakTimeWindowStart = convertDateString(
+        '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 0);
+    vehicle.breakTimeWindowEnd = convertDateString(
+        '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 0);
     vehicle.availableFromUtc = convertDateString(
         '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 60);
     vehicle.availableUntilUtc = convertDateString(
@@ -230,9 +238,10 @@ class OptimizedRouteViewModel extends BaseViewModel {
     // final object =
     final prettyString = JsonEncoder.withIndent(" ").convert(job.toMap());
     print(prettyString);
-    var response = await _goloopService.postJob(encodeJsonString());
+    var response = await _goloopService.postJob(job);
 
     if (response is SubmittedJob) {
+      await getSubmittedJobs();
       print(response.toMap());
     } else {
       print('Could not do that');
@@ -443,5 +452,38 @@ class OptimizedRouteViewModel extends BaseViewModel {
     };
 
     return object;
+  }
+
+  getSolution(index) async {
+    print(jobs[index].toMap());
+    int? jobId = jobs[index].jobId;
+    Manifest manifest = new Manifest();
+    var jobSolutionResult = await _goloopService.getSolutionForJob(jobId);
+
+    if (jobSolutionResult is JobSolution) {
+      JobSolution solution = jobSolutionResult;
+
+      var statusResult =
+          await _goloopService.getStatusForSolution(jobId, solution.solutionId);
+
+      if (statusResult is JobStatus) {
+        if (statusResult.status == 'FOUND') {
+          var manifestResult =
+              await _goloopService.getJobManifest(jobId, solution.solutionId);
+
+          if (manifestResult is Manifest) {
+            print(prettyObject(manifestResult.toMap()));
+            manifest = manifestResult;
+            // Route us to the map
+          } else {
+            print('Manifest not found');
+          }
+        } else {
+          print('Display to user that optimization is not ready');
+        }
+        print(prettyObject(statusResult.toMap()));
+      }
+    }
+    // if (problemForJob)
   }
 }

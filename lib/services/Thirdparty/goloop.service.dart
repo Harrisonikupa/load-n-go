@@ -4,6 +4,10 @@ import 'package:http/http.dart' as http;
 import 'package:loadngo/app/app.locator.dart';
 import 'package:loadngo/models/goloop/access-token/access-token-request.model.dart';
 import 'package:loadngo/models/goloop/access-token/access-token-response.dart';
+import 'package:loadngo/models/goloop/job/job-details.model.dart';
+import 'package:loadngo/models/goloop/job/job-solution.dart';
+import 'package:loadngo/models/goloop/job/job-status.model.dart';
+import 'package:loadngo/models/goloop/job/manifest.model.dart';
 import 'package:loadngo/models/goloop/job/submitted-job.model.dart';
 import 'package:loadngo/shared/secrets.dart';
 import 'package:loadngo/shared/storage/shared-preferences.storage.dart';
@@ -39,13 +43,13 @@ class GoloopService {
   }
 
   // Post a new Job
-  Future postJob(request) async {
+  Future postJob(JobDetails request) async {
     headers['Content-Type'] = 'application/json';
     headers['Authorization'] = 'Bearer ${accessToken.accessToken}';
     var submittedJobResponse = new SubmittedJob();
     var response = await client.post(
         Uri.parse('${Secrets.goloop_base_url}api/v1/solver/job'),
-        body: jsonEncode(request),
+        body: jsonEncode(request.toMap()),
         headers: headers);
 
     var parsed = jsonDecode(response.body);
@@ -77,5 +81,91 @@ class GoloopService {
     }
 
     return jobs;
+  }
+
+  Future getProblemForJob(jobId) async {
+    headers['Content-Type'] = 'application/json';
+    headers['Authorization'] = 'Bearer ${accessToken.accessToken}';
+    dynamic problemForJob;
+
+    var response = await client.get(
+        Uri.parse('${Secrets.goloop_base_url}api/v1/solver/job/$jobId'),
+        headers: headers);
+    var parsed = json.decode(response.body);
+
+    if (response.statusCode == 200) {
+      problemForJob = parsed;
+    } else {
+      print('Error >>>>>>>>>>>>>');
+    }
+
+    return problemForJob;
+  }
+
+  Future getSolutionForJob(jobId) async {
+    headers['Content-Type'] = 'application/json';
+    headers['Authorization'] = 'Bearer ${accessToken.accessToken}';
+    dynamic solutionForJob;
+
+    var response = await client.get(
+        Uri.parse(
+            '${Secrets.goloop_base_url}api/v1/solver/job/$jobId/solution'),
+        headers: headers);
+    var parsed = json.decode(response.body);
+
+    if (response.statusCode == 200) {
+      print(parsed);
+      if (parsed.length > 0) {
+        solutionForJob = JobSolution.fromMap(parsed[0]);
+      } else {
+        print('Error >>>>>>>>>>>>>');
+        return;
+      }
+    } else {
+      print('Error >>>>>>>>>>>>>');
+    }
+
+    return solutionForJob;
+  }
+
+  Future getStatusForSolution(jobId, solutionId) async {
+    headers['Content-Type'] = 'application/json';
+    headers['Authorization'] = 'Bearer ${accessToken.accessToken}';
+    dynamic status;
+
+    var response = await client.get(
+        Uri.parse(
+            '${Secrets.goloop_base_url}api/v1/solver/job/$jobId/solution/$solutionId/status'),
+        headers: headers);
+    var parsed = json.decode(response.body);
+
+    if (response.statusCode == 200) {
+      status = JobStatus.fromMap(parsed);
+    } else {
+      print('Error >>>>>>>>>>>>>');
+    }
+
+    return status;
+  }
+
+  Future getJobManifest(jobId, solutionId) async {
+    headers['Content-Type'] = 'application/json';
+    headers['Authorization'] = 'Bearer ${accessToken.accessToken}';
+    dynamic manifest;
+
+    var response = await client.get(
+        Uri.parse(
+            '${Secrets.goloop_base_url}api/v1/solver/job/$jobId/solution/$solutionId/result'),
+        headers: headers);
+    var parsed = json.decode(response.body);
+
+    if (response.statusCode == 200) {
+      print(JsonEncoder.withIndent(" ").convert(parsed));
+      manifest = Manifest.fromMap(parsed);
+    } else {
+      print('Error >>>>>>>>>>>>>');
+    }
+
+    return manifest;
   }
 }

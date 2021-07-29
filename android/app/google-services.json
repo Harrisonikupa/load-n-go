@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "519692271984",
-    "project_id": "load-n-go-53f47",
-    "storage_bucket": "load-n-go-53f47.appspot.com"
+    "project_number": "624736546057",
+    "project_id": "load-n-go-fcdb9",
+    "storage_bucket": "load-n-go-fcdb9.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:519692271984:android:f611855bb3924a420dcfb5",
+        "mobilesdk_app_id": "1:624736546057:android:e4b0d81b9fe0f394a5f7d8",
         "android_client_info": {
           "package_name": "com.example.loadngo"
         }
       },
       "oauth_client": [
         {
-          "client_id": "519692271984-baubpvearg637iiqfgpi49klvl1dcita.apps.googleusercontent.com",
+          "client_id": "624736546057-a52djmifhdkboqpdjhmbqc1g1rjo2o54.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB-t1hkoMnxeZDIWtMVVTW52FhN8csOsng"
+          "current_key": "AIzaSyCbG7sqtsEtRAhY0gQ9G7bRmyT39ve_3wg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "519692271984-baubpvearg637iiqfgpi49klvl1dcita.apps.googleusercontent.com",
+              "client_id": "624736546057-a52djmifhdkboqpdjhmbqc1g1rjo2o54.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

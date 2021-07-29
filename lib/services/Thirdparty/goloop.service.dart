@@ -46,21 +46,17 @@ class GoloopService {
   Future postJob(JobDetails request) async {
     headers['Content-Type'] = 'application/json';
     headers['Authorization'] = 'Bearer ${accessToken.accessToken}';
-    var submittedJobResponse = new SubmittedJob();
+    SubmittedJob submittedJobResponse = new SubmittedJob();
     var response = await client.post(
         Uri.parse('${Secrets.goloop_base_url}api/v1/solver/job'),
         body: jsonEncode(request.toMap()),
         headers: headers);
 
-    var parsed = jsonDecode(response.body);
+    var parsed = json.decode(response.body);
 
     if (response.statusCode == 200) {
-      print('${response.body} >>>>>>>>>>>>>>>>>>>>>> it passed');
-      if (parsed is SubmittedJob) {
-        submittedJobResponse = parsed;
-      }
+      submittedJobResponse = SubmittedJob.fromMap(parsed);
     } else {
-      print('$parsed >>>>>>>>>>>>>>>>> error');
       _dialogService.showDialog(title: 'Error', description: parsed['Message']);
       throw Exception(parsed);
     }

@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:geocoding/geocoding.dart';
 import 'package:loadngo/app/app.locator.dart';
-import 'package:loadngo/app/app.router.dart';
 import 'package:loadngo/models/goloop/job/job-details.model.dart';
 import 'package:loadngo/models/goloop/job/job-solution.dart';
 import 'package:loadngo/models/goloop/job/job-status.model.dart';
@@ -12,6 +11,7 @@ import 'package:loadngo/models/goloop/single-models/capacity-used.model.dart';
 import 'package:loadngo/models/goloop/single-models/capacity.model.dart';
 import 'package:loadngo/models/goloop/single-models/consignment.model.dart';
 import 'package:loadngo/models/goloop/single-models/container.model.dart';
+import 'package:loadngo/models/goloop/single-models/job.model.dart';
 import 'package:loadngo/models/goloop/single-models/location.model.dart';
 import 'package:loadngo/models/goloop/single-models/model-options.model.dart';
 import 'package:loadngo/models/goloop/single-models/priority.model.dart';
@@ -37,16 +37,17 @@ class OptimizedRouteViewModel extends BaseViewModel {
   List<OrderWithLocation> _refinedOrders = [];
   List<OrderWithLocation> get refinedOrders => _refinedOrders;
 
-  List<SubmittedJob> _jobs = [];
-  List<SubmittedJob> get jobs => _jobs;
+  List<Job> _jobs = [];
+  List<Job> get jobs => _jobs;
+  SubmittedJob _submittedJob = new SubmittedJob();
 
   var depotLatitude;
   var depotLongitude;
   modelIsReady() async {
+    listenToJobs();
     await fetchOrders();
-    await getSubmittedJobs();
+    // await getSubmittedJobs();
     var response = await convertDeliveryAddressesToLongAndLat(orders);
-    print('done');
     if (response is List<OrderWithLocation>) {
       _refinedOrders = response;
     }
@@ -66,19 +67,19 @@ class OptimizedRouteViewModel extends BaseViewModel {
     setBusy(false);
   }
 
-  Future getSubmittedJobs() async {
-    setBusy(true);
-    var submittedJobResult = await _goloopService.listOfJobs();
-
-    if (submittedJobResult is List<SubmittedJob>) {
-      _jobs = submittedJobResult;
-      print('$_jobs >>>>>>>>>>>>>>>>>>submitted jobs');
-      notifyListeners();
-    } else {
-      _dialogService.showDialog(title: 'Unable to fetch jobs', description: '');
-    }
-    setBusy(false);
-  }
+  // Future getSubmittedJobs() async {
+  //   setBusy(true);
+  //   var submittedJobResult = await _goloopService.listOfJobs();
+  //
+  //   if (submittedJobResult is List<SubmittedJob>) {
+  //     _jobs = submittedJobResult;
+  //     print('$_jobs >>>>>>>>>>>>>>>>>>submitted jobs');
+  //     notifyListeners();
+  //   } else {
+  //     _dialogService.showDialog(title: 'Unable to fetch jobs', description: '');
+  //   }
+  //   setBusy(false);
+  // }
 
   Future convertDeliveryAddressesToLongAndLat(
       List<OrderWithLocation> orders) async {
@@ -98,7 +99,6 @@ class OptimizedRouteViewModel extends BaseViewModel {
 
   createJob() async {
     int clientServiceTime = 10;
-    int totalQuantity = 0;
     JobDetails job = new JobDetails();
     ModelOptions modelOptions = new ModelOptions();
     List<Consignment> consignments = <Consignment>[];
@@ -173,7 +173,6 @@ class OptimizedRouteViewModel extends BaseViewModel {
       capacitiesUsed.used = order.quantity;
       consignment.capacitiesUsed = [capacitiesUsed];
       consignment.vehicleContainerTypeRequired = 'generic';
-      totalQuantity += order.quantity!;
       consignments.add(consignment);
       lastTimeAdded = lastTimeAdded! + increase;
     });
@@ -228,31 +227,29 @@ class OptimizedRouteViewModel extends BaseViewModel {
     job.vehicles = vehicles;
     job.priorities = priorities;
 
-    // job.consignments!.forEach((element) {
-    //   print('${element.toMap()} >>>>>>>>>>>>>> consignment');
-    // });
-    // job.locations!.forEach((element) {
-    //   print('${element.toMap()} >>>>>>>>>>>>> location');
-    // });
-    // job.vehicles!.forEach((element) {
-    //   print('${element.toMap()} >>>>>>>>>>>>>> vehicle');
-    // });
-    // job.priorities!.forEach((element) {
-    //   print('${element.toMap()} >>>>>>>>>>>>> priority');
-    // });
-
-    // final object =
-
-    print(prettyObject(job.toMap()));
     var response = await _goloopService.postJob(job);
 
     if (response is SubmittedJob) {
-      // Job jobInstance = new Job();
-      // jobInstance.jobId = response.jobId;
-      // jobInstance.jobString = prettyObject(job.toMap());
-      // await _firestoreService.addJob(jobInstance);
-      DataStorage.setJob(job);
-      await getSubmittedJobs();
+      _submittedJob = response;
+      Job jobInstance = new Job();
+      jobInstance.jobId = _submittedJob.jobId;
+      jobInstance.jobString = prettyObject(job.toMap());
+
+      print('${jobInstance.toMap()} >>>>>>>>>> Job instance');
+
+      var result = await _firestoreService.addJob(jobInstance);
+
+      if (result is String) {
+        await _dialogService.showDialog(
+            title: 'Could not create order', description: result);
+      } else {
+        await _dialogService.showDialog(
+          title: 'Job submitted successfully',
+          description: 'Your job was submitted successfully',
+        );
+      }
+      // DataStorage.setJob(job);
+      // await getSubmittedJobs();
     } else {
       print('Could not do that');
     }
@@ -272,7 +269,7 @@ class OptimizedRouteViewModel extends BaseViewModel {
     return prettyString;
   }
 
-  encodeJsonString() {
+  /*encodeJsonString() {
     dynamic object = {
       "consignments": [
         {
@@ -462,12 +459,13 @@ class OptimizedRouteViewModel extends BaseViewModel {
     };
 
     return object;
-  }
+  }*/
 
   getSolution(index) async {
-    print(jobs[index].toMap());
+    print('${jobs[index].jobId} >>>>>>>>> job');
     int? jobId = jobs[index].jobId;
     Manifest manifest = new Manifest();
+    JobDetails jobDetails = new JobDetails();
     var jobSolutionResult = await _goloopService.getSolutionForJob(jobId);
 
     if (jobSolutionResult is JobSolution) {
@@ -486,8 +484,13 @@ class OptimizedRouteViewModel extends BaseViewModel {
                 '${manifestResult.toMap()} >>>>>>>>>>>>>>>> Manifest'));
             manifest = manifestResult;
             DataStorage.setManifest(manifest);
+            if (jobs[index].jobString is JobDetails) {
+              jobDetails = jobs[index].jobString as JobDetails;
+              DataStorage.setJob(jobDetails);
+            }
 
-            navigationService.navigateTo(Routes.manifestView);
+            print(jobDetails.toMap());
+            // navigationService.navigateTo(Routes.manifestView);
             // Route us to the map
           } else {
             print('Manifest not found');
@@ -503,5 +506,17 @@ class OptimizedRouteViewModel extends BaseViewModel {
       }
     }
     // if (problemForJob)
+  }
+
+  void listenToJobs() {
+    setBusy(true);
+    _firestoreService.listenToJobsRealTime().listen((jobsData) {
+      List<Job> updatedJobs = jobsData;
+      if (jobsData != null && updatedJobs.length > 0) {
+        _jobs = updatedJobs;
+        notifyListeners();
+      }
+      setBusy(false);
+    });
   }
 }

@@ -13,7 +13,6 @@ class FirestoreService {
       FirebaseFirestore.instance.collection('job');
   final StreamController<List<Order>> _orderController =
       StreamController<List<Order>>.broadcast();
-
   final StreamController<List<Job>> _jobController =
       StreamController<List<Job>>.broadcast();
   // Future createOrder(Order order) async {
@@ -189,8 +188,9 @@ class FirestoreService {
   }
 
   Future addJob(Job job) async {
+    print('${job.toMap()} >>>>>>>>. what i want to save');
     try {
-      await _jobCollectionReference.add(job);
+      await _jobCollectionReference.add(job.toMap());
     } catch (e) {
       // TODO: Find or create a way to repeat error handling without so much repeated code
       if (e is PlatformException) {
@@ -218,12 +218,12 @@ class FirestoreService {
 
   Future getJobsWithoutListeners() async {
     try {
-      var orderDocumentSnapshot = await _orderCollectionReference.get();
-      if (orderDocumentSnapshot.docs.isNotEmpty) {
-        return orderDocumentSnapshot.docs
-            .map((snapshot) => OrderWithLocation.fromJson(
+      var jobDocumentSnapshot = await _jobCollectionReference.get();
+      if (jobDocumentSnapshot.docs.isNotEmpty) {
+        return jobDocumentSnapshot.docs
+            .map((snapshot) => Job.fromMap(
                 snapshot.data() as Map<String, dynamic>, snapshot.id))
-            .where((mappedItem) => mappedItem.orderNumber != null)
+            .where((mappedItem) => mappedItem.jobId != null)
             .toList();
       }
     } catch (e) {

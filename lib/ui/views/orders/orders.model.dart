@@ -85,8 +85,9 @@ class OrdersViewModel extends BaseViewModel {
           title: 'Could not create order', description: result);
     } else {
       await _dialogService.showDialog(
-          title: 'Order created successfully',
-          description: 'Your order was added');
+        title: 'Order created successfully',
+        description: 'Your order was added',
+      );
     }
   }
 

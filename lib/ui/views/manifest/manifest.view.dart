@@ -186,14 +186,17 @@ class ManifestView extends StatelessWidget {
                                       ),
                                       Padding(
                                         padding: new EdgeInsets.only(right: 30),
-                                        child: Text(
-                                          '${model.manifestList[index].address}',
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                            fontSize:
-                                                getProportionateScreenWidth(14),
-                                            fontWeight: FontWeight.w800,
-                                            color: blackColor,
+                                        child: FittedBox(
+                                          child: Text(
+                                            '${model.manifestList[index].address}',
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                              fontSize:
+                                                  getProportionateScreenWidth(
+                                                      12),
+                                              fontWeight: FontWeight.w800,
+                                              color: blackColor,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -205,7 +208,7 @@ class ManifestView extends StatelessWidget {
                                         style: TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontSize:
-                                                getProportionateScreenWidth(14),
+                                                getProportionateScreenWidth(12),
                                             color: borderGreyColor),
                                       )
                                     ],

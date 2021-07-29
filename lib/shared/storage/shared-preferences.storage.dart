@@ -34,7 +34,6 @@ class DataStorage {
   static getManifest() {
     String? manifest = _preferences.getString(keyManifest);
     Manifest data = Manifest.fromMap(jsonDecode(manifest!));
-    print(data);
     return data;
   }
 
@@ -46,7 +45,6 @@ class DataStorage {
   static getJob() {
     String? job = _preferences.getString(keyJob);
     JobDetails data = JobDetails.fromMap(jsonDecode(job!));
-    print(data);
     return data;
   }
 

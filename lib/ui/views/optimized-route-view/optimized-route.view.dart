@@ -43,7 +43,7 @@ class OptimizedRouteView extends StatelessWidget {
                   children: [
                     Container(),
                     Text(
-                      'Optimized Routes',
+                      'List of Jobs',
                       // textAlign: TextAlign.start,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -58,44 +58,51 @@ class OptimizedRouteView extends StatelessWidget {
                   height: getProportionateScreenHeight(15.0),
                 ),
                 Expanded(
-                    child: ListView.builder(
-                  itemCount: model.jobs.length,
-                  itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () => model.getSolution(index),
-                      child: Container(
-                        width: double.infinity,
-                        height: getProportionateScreenWidth(60),
-                        decoration: BoxDecoration(
-                          color: whiteColor,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                                offset: Offset(0, 3),
-                                color: Color(0xFF35B8BE),
-                                blurRadius: 8.0)
-                          ],
+                  child: GridView.count(
+                    // Create a grid with 2 columns. If you change the scrollDirection to
+                    // horizontal, this produces 2 rows.
+                    crossAxisCount: 4,
+                    // Generate 100 widgets that display their index in the List.
+                    children: List.generate(model.jobs.length, (index) {
+                      return InkWell(
+                        onTap: () => model.getSolution(index),
+                        child: Container(
+                          width: double.infinity,
+                          height: getProportionateScreenWidth(60),
+                          decoration: BoxDecoration(
+                            color: whiteColor,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                  offset: Offset(0, 3),
+                                  color: Color(0xFF35B8BE),
+                                  blurRadius: 8.0)
+                            ],
+                          ),
+                          margin: new EdgeInsets.all(
+                            getProportionateScreenWidth(10),
+                          ),
+                          padding: new EdgeInsets.all(
+                              getProportionateScreenWidth(10)),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Job ID: ${model.jobs[index].jobId}',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: getProportionateScreenWidth(10),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        margin: new EdgeInsets.all(
-                          getProportionateScreenWidth(10),
-                        ),
-                        padding:
-                            new EdgeInsets.all(getProportionateScreenWidth(10)),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Job ID: ${model.jobs[index].jobId}',
-                              style: TextStyle(
-                                  fontSize: getProportionateScreenWidth(18), fontWeight: FontWeight.w600,),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                )),
+                      );
+                    }),
+                  ),
+                )
               ],
             ),
           ),

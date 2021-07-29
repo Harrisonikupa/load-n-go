@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:geocoding/geocoding.dart';
 import 'package:loadngo/app/app.locator.dart';
+import 'package:loadngo/app/app.router.dart';
 import 'package:loadngo/models/goloop/job/job-details.model.dart';
 import 'package:loadngo/models/goloop/job/job-solution.dart';
 import 'package:loadngo/models/goloop/job/job-status.model.dart';
@@ -66,20 +67,6 @@ class OptimizedRouteViewModel extends BaseViewModel {
     }
     setBusy(false);
   }
-
-  // Future getSubmittedJobs() async {
-  //   setBusy(true);
-  //   var submittedJobResult = await _goloopService.listOfJobs();
-  //
-  //   if (submittedJobResult is List<SubmittedJob>) {
-  //     _jobs = submittedJobResult;
-  //     print('$_jobs >>>>>>>>>>>>>>>>>>submitted jobs');
-  //     notifyListeners();
-  //   } else {
-  //     _dialogService.showDialog(title: 'Unable to fetch jobs', description: '');
-  //   }
-  //   setBusy(false);
-  // }
 
   Future convertDeliveryAddressesToLongAndLat(
       List<OrderWithLocation> orders) async {
@@ -234,8 +221,6 @@ class OptimizedRouteViewModel extends BaseViewModel {
       Job jobInstance = new Job();
       jobInstance.jobId = _submittedJob.jobId;
       jobInstance.jobString = prettyObject(job.toMap());
-
-      print('${jobInstance.toMap()} >>>>>>>>>> Job instance');
 
       var result = await _firestoreService.addJob(jobInstance);
 
@@ -462,35 +447,25 @@ class OptimizedRouteViewModel extends BaseViewModel {
   }*/
 
   getSolution(index) async {
-    print('${jobs[index].jobId} >>>>>>>>> job');
     int? jobId = jobs[index].jobId;
-    Manifest manifest = new Manifest();
     JobDetails jobDetails = new JobDetails();
+    var problemForJobResult = await _goloopService.getProblemForJob(jobId);
+    if (problemForJobResult is JobDetails) {
+      jobDetails = problemForJobResult;
+      await DataStorage.setJob(jobDetails);
+    }
     var jobSolutionResult = await _goloopService.getSolutionForJob(jobId);
-
     if (jobSolutionResult is JobSolution) {
       JobSolution solution = jobSolutionResult;
-
       var statusResult =
           await _goloopService.getStatusForSolution(jobId, solution.solutionId);
-
       if (statusResult is JobStatus) {
         if (statusResult.status == 'FOUND') {
           var manifestResult =
               await _goloopService.getJobManifest(jobId, solution.solutionId);
-
           if (manifestResult is Manifest) {
-            print(prettyObject(
-                '${manifestResult.toMap()} >>>>>>>>>>>>>>>> Manifest'));
-            manifest = manifestResult;
-            DataStorage.setManifest(manifest);
-            if (jobs[index].jobString is JobDetails) {
-              jobDetails = jobs[index].jobString as JobDetails;
-              DataStorage.setJob(jobDetails);
-            }
-
-            print(jobDetails.toMap());
-            // navigationService.navigateTo(Routes.manifestView);
+            await DataStorage.setManifest(manifestResult);
+            navigationService.navigateTo(Routes.manifestView);
             // Route us to the map
           } else {
             print('Manifest not found');
@@ -502,10 +477,8 @@ class OptimizedRouteViewModel extends BaseViewModel {
                   'Your optimization is currently in progress. It\'ll just take a few minutes');
           print('Display to user that optimization is not ready');
         }
-        print(prettyObject(statusResult.toMap()));
       }
     }
-    // if (problemForJob)
   }
 
   void listenToJobs() {

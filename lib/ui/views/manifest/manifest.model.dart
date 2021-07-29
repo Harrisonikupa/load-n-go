@@ -41,6 +41,7 @@ class ManifestViewModel extends BaseViewModel {
   List<LatLng> polylineCoordinates = [];
   Set<Marker> markers = Set<Marker>();
   var counter = new List.filled(10, null, growable: true);
+
   modelIsReady() async {
     if (DataStorage.containsKey(DataStorage.keyManifest)) {
       manifest = DataStorage.getManifest();
@@ -76,7 +77,7 @@ class ManifestViewModel extends BaseViewModel {
       if (location.id == id) {
         coordinateLat = double.parse(location.latitude!);
         coordinateLng = double.parse(location.longitude!);
-      }
+      } else {}
     });
 
     return LatLng(coordinateLat, coordinateLng);
@@ -157,7 +158,6 @@ class ManifestViewModel extends BaseViewModel {
       BitmapDescriptor iconPin = await BitmapDescriptor.fromAssetImage(
           ImageConfiguration(devicePixelRatio: 1.0),
           'assets/images/$index.png');
-      print(iconPin);
       markerIcons.add(iconPin);
     });
   }

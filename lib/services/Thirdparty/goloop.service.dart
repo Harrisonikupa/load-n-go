@@ -90,7 +90,7 @@ class GoloopService {
     var parsed = json.decode(response.body);
 
     if (response.statusCode == 200) {
-      problemForJob = parsed;
+      problemForJob = JobDetails.fromMap(parsed);
     } else {
       print('Error >>>>>>>>>>>>>');
     }
@@ -156,7 +156,6 @@ class GoloopService {
     var parsed = json.decode(response.body);
 
     if (response.statusCode == 200) {
-      print(JsonEncoder.withIndent(" ").convert(parsed));
       manifest = Manifest.fromMap(parsed);
     } else {
       print('Error >>>>>>>>>>>>>');

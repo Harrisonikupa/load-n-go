@@ -76,14 +76,25 @@ class ManifestView extends StatelessWidget {
                             new EdgeInsets.all(getProportionateScreenWidth(20)),
                         width: MediaQuery.of(context).size.width / 2,
                         child: Text(
-                          'Stops',
+                          'Stops (${model.manifestList.length})',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: whiteColor,
+                            color: model.currentTab == 0
+                                ? whiteColor
+                                : primaryColor,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        decoration: BoxDecoration(color: primaryColor),
+                        decoration: BoxDecoration(
+                          color:
+                              model.currentTab == 0 ? primaryColor : whiteColor,
+                          border: Border.all(
+                            color: model.currentTab == 0
+                                ? whiteColor
+                                : primaryColor,
+                            width: model.currentTab == 0 ? 2 : 0,
+                          ),
+                        ),
                       ),
                     ),
                     InkWell(
@@ -96,11 +107,22 @@ class ManifestView extends StatelessWidget {
                           'Map',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: whiteColor,
+                            color: model.currentTab == 1
+                                ? whiteColor
+                                : primaryColor,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        decoration: BoxDecoration(color: primaryColor),
+                        decoration: BoxDecoration(
+                          color:
+                              model.currentTab == 1 ? primaryColor : whiteColor,
+                          border: Border.all(
+                            color: model.currentTab == 1
+                                ? whiteColor
+                                : primaryColor,
+                            width: model.currentTab == 1 ? 2 : 0,
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -108,97 +130,91 @@ class ManifestView extends StatelessWidget {
                 model.currentTab == 0
                     ? Expanded(
                         child: Padding(
-                            padding: new EdgeInsets.all(
-                                getProportionateScreenWidth(8)),
-                            child: ListView.builder(
-                                itemCount: model.manifestList.length,
-                                itemBuilder: (context, index) => Container(
-                                      margin: new EdgeInsets.only(
-                                        bottom: getProportionateScreenWidth(10),
+                          padding: new EdgeInsets.all(
+                              getProportionateScreenWidth(8)),
+                          child: ListView.builder(
+                            itemCount: model.manifestList.length,
+                            itemBuilder: (context, index) => Container(
+                              margin: new EdgeInsets.only(
+                                bottom: getProportionateScreenWidth(10),
+                              ),
+                              padding: new EdgeInsets.all(
+                                getProportionateScreenWidth(20),
+                              ),
+                              width: double.infinity,
+                              height: getProportionateScreenHeight(100),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                border:
+                                    Border.all(color: primaryColor, width: 2),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    height: getProportionateScreenWidth(30),
+                                    width: getProportionateScreenWidth(30),
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        '${index + 1}',
+                                        style: TextStyle(
+                                          color: primaryColor,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize:
+                                              getProportionateScreenWidth(18),
+                                        ),
                                       ),
-                                      padding: new EdgeInsets.all(
-                                        getProportionateScreenWidth(20),
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: whiteColor,
+                                      border: Border.all(
+                                          color: primaryColor, width: 3),
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: getProportionateScreenWidth(20),
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        height:
+                                            getProportionateScreenHeight(10),
                                       ),
-                                      width: double.infinity,
-                                      height: getProportionateScreenHeight(100),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        border: Border.all(
-                                            color: primaryColor, width: 3),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            height:
-                                                getProportionateScreenWidth(30),
-                                            width:
-                                                getProportionateScreenWidth(30),
-                                            child: Align(
-                                              alignment: Alignment.center,
-                                              child: Text(
-                                                '${index + 1}',
-                                                style: TextStyle(
-                                                  color: primaryColor,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize:
-                                                      getProportionateScreenWidth(
-                                                          18),
-                                                ),
-                                              ),
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: whiteColor,
-                                              border: Border.all(
-                                                  color: primaryColor,
-                                                  width: 3),
-                                              borderRadius:
-                                                  BorderRadius.circular(100),
-                                            ),
+                                      Padding(
+                                        padding: new EdgeInsets.only(right: 30),
+                                        child: Text(
+                                          '${model.manifestList[index].address}',
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                            fontSize:
+                                                getProportionateScreenWidth(14),
+                                            fontWeight: FontWeight.w800,
+                                            color: blackColor,
                                           ),
-                                          SizedBox(
-                                            width:
-                                                getProportionateScreenWidth(20),
-                                          ),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              SizedBox(
-                                                height:
-                                                    getProportionateScreenHeight(
-                                                        10),
-                                              ),
-                                              Text(
-                                                '${model.manifestList[index].address}',
-                                                style: TextStyle(
-                                                  fontSize:
-                                                      getProportionateScreenWidth(
-                                                          16),
-                                                  fontWeight: FontWeight.w800,
-                                                  color: blackColor,
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height:
-                                                    getProportionateScreenWidth(
-                                                        8),
-                                              ),
-                                              Text(
-                                                '${model.getTime(model.manifestList[index].arrivalTime)} - ${model.getTime(model.manifestList[index].departureTime)}',
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize:
-                                                        getProportionateScreenWidth(
-                                                            14),
-                                                    color: borderGreyColor),
-                                              )
-                                            ],
-                                          )
-                                        ],
+                                        ),
                                       ),
-                                    ))),
+                                      SizedBox(
+                                        height: getProportionateScreenWidth(8),
+                                      ),
+                                      Text(
+                                        '${model.getTime(model.manifestList[index].arrivalTime)} - ${model.getTime(model.manifestList[index].departureTime)}',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize:
+                                                getProportionateScreenWidth(14),
+                                            color: borderGreyColor),
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                       )
                     : Expanded(
                         child: Stack(
@@ -216,7 +232,7 @@ class ManifestView extends StatelessWidget {
                                   Set<Polyline>.of(model.polylines.values),
                               initialCameraPosition: CameraPosition(
                                 target: LatLng(model.manifestList[0].latitude!,
-                                    model.manifestList[0].longitude!),
+                                    model.manifestList[2].longitude!),
                                 bearing: model.CAMERA_BEARING,
                                 // tilt: model.CAMERA_TILT,
                                 zoom: model.CAMERA_ZOOM,
@@ -225,7 +241,45 @@ class ManifestView extends StatelessWidget {
                                 model.controller = controller;
                               },
                             ),
-                          )
+                          ),
+                          Positioned(
+                              top: 0,
+                              bottom: getProportionateScreenWidth(590),
+                              left: getProportionateScreenWidth(80),
+                              right: getProportionateScreenWidth(80),
+                              child: Container(
+                                width: getProportionateScreenWidth(100),
+                                height: getProportionateScreenWidth(50),
+                                decoration: BoxDecoration(
+                                  color: whiteColor,
+                                  borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10),
+                                  ),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Total Distance',
+                                      style: TextStyle(
+                                          color: darkGreyColor,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    ),
+                                    SizedBox(
+                                      height: getProportionateScreenHeight(5),
+                                    ),
+                                    Text(
+                                      '${(model.manifest.manifest![0].distanceTotalMetres / 1000).toStringAsFixed(2)}KM',
+                                      style: TextStyle(
+                                          color: darkGreyColor,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    )
+                                  ],
+                                ),
+                              ))
                         ],
                       )),
               ],

@@ -122,7 +122,7 @@ class OptimizedRouteViewModel extends BaseViewModel {
     // Populate model options
     modelOptions.computeTimeMilliseconds = 25000;
     modelOptions.lateHourlyPenaltyCents = 1000;
-    modelOptions.workingTimeLimitMinutes = 100;
+    modelOptions.workingTimeLimitMinutes = 1020;
     modelOptions.timeWindows = 'soft';
     modelOptions.performBreaks = false;
     modelOptions.nodeSlackTimeMinutes = 10;
@@ -139,6 +139,8 @@ class OptimizedRouteViewModel extends BaseViewModel {
     depotLongLat.longitude = depotLongitude.toString();
     locations.add(depotLongLat);
 
+    int? lastTimeAdded = 0;
+    const increase = 15;
     refinedOrders.asMap().forEach((index, order) {
       Locations location = new Locations();
       location.id = uuid.v4().toString();
@@ -152,16 +154,17 @@ class OptimizedRouteViewModel extends BaseViewModel {
       consignment.locationIdFrom = depotLongLat.id;
       consignment.locationIdTo = location.id;
       consignment.priority = 'standard';
-      consignment.pickupTimeStartUtc = convertDateString(
-          '${order.pickupDate}${Secrets.date_suffix}', 0 * (index + 1));
-      consignment.pickupTimeEndUtc = convertDateString(
-          '${order.pickupDate}${Secrets.date_suffix}', 15 * (index + 1));
+      consignment.pickupTimeStartUtc =
+          convertDateString('${order.pickupDate}${Secrets.date_suffix}', 0);
+      consignment.pickupTimeEndUtc =
+          convertDateString('${order.pickupDate}${Secrets.date_suffix}', 720);
       consignment.pickupServiceTimeMinutes = clientServiceTime;
       consignment.pickupTimeWindowConstraint = 'soft';
       consignment.deliverTimeStartUtc = convertDateString(
-          '${order.deliveryDate}${Secrets.date_suffix}', 0 * (index + 1));
+          '${order.deliveryDate}${Secrets.date_suffix}', lastTimeAdded);
       consignment.deliverTimeEndUtc = convertDateString(
-          '${order.deliveryDate}${Secrets.date_suffix}', 15 * (index + 1));
+          '${order.deliveryDate}${Secrets.date_suffix}',
+          lastTimeAdded! + increase);
       consignment.deliverServiceTimeMinutes = clientServiceTime;
       consignment.deliverTimeWindowConstraint = 'soft';
       CapacitiesUsed capacitiesUsed = new CapacitiesUsed();
@@ -172,6 +175,7 @@ class OptimizedRouteViewModel extends BaseViewModel {
       consignment.vehicleContainerTypeRequired = 'generic';
       totalQuantity += order.quantity!;
       consignments.add(consignment);
+      lastTimeAdded = lastTimeAdded! + increase;
     });
 
     Vehicle vehicle = new Vehicle();
@@ -181,21 +185,22 @@ class OptimizedRouteViewModel extends BaseViewModel {
     vehicle.locationEndId = depotLongLat.id;
     vehicle.breakDurationMinutes = 0;
     vehicle.breakTimeWindowStart = convertDateString(
-        '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 0);
+        '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 730);
     vehicle.breakTimeWindowEnd = convertDateString(
-        '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 0);
+        '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 730);
     vehicle.availableFromUtc = convertDateString(
-        '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 60);
+        '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 0);
     vehicle.availableUntilUtc = convertDateString(
-        '${refinedOrders[refinedOrders.length - 1].pickupDate}${Secrets.date_suffix}',
-        6000);
+      '${refinedOrders[0].pickupDate}${Secrets.date_suffix}',
+      1000,
+    );
     Container container = new Container();
     container.type = uuid.v4().toString();
     Capacity capacity = new Capacity();
     capacity.type = uuid.v4().toString();
     capacity.type = 'weight';
     capacity.units = 'kg';
-    capacity.maximum = totalQuantity;
+    capacity.maximum = 250;
     container.capacities = [capacity];
     container.type = 'generic';
     vehicle.containers = [container];
@@ -238,6 +243,7 @@ class OptimizedRouteViewModel extends BaseViewModel {
 
     // final object =
 
+    print(prettyObject(job.toMap()));
     var response = await _goloopService.postJob(job);
 
     if (response is SubmittedJob) {
@@ -476,7 +482,8 @@ class OptimizedRouteViewModel extends BaseViewModel {
               await _goloopService.getJobManifest(jobId, solution.solutionId);
 
           if (manifestResult is Manifest) {
-            print(prettyObject(manifestResult.toMap()));
+            print(prettyObject(
+                '${manifestResult.toMap()} >>>>>>>>>>>>>>>> Manifest'));
             manifest = manifestResult;
             DataStorage.setManifest(manifest);
 
@@ -486,6 +493,10 @@ class OptimizedRouteViewModel extends BaseViewModel {
             print('Manifest not found');
           }
         } else {
+          _dialogService.showDialog(
+              title: 'In Progress!',
+              description:
+                  'Your optimization is currently in progress. It\'ll just take a few minutes');
           print('Display to user that optimization is not ready');
         }
         print(prettyObject(statusResult.toMap()));

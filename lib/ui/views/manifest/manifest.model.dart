@@ -1,6 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
@@ -22,19 +26,21 @@ class ManifestViewModel extends BaseViewModel {
   final DialogService _dialogService = locator<DialogService>();
   final GoloopService _goloopService = locator<GoloopService>();
 
+  List<BitmapDescriptor> markerIcons = <BitmapDescriptor>[];
+
   var uuid = Uuid();
   int? currentTab = 0;
   Manifest manifest = new Manifest();
   JobDetails job = new JobDetails();
   List<ManifestItem> manifestList = <ManifestItem>[];
   late GoogleMapController controller;
-  final double CAMERA_ZOOM = 16;
-  final double CAMERA_TILT = 80;
+  final double CAMERA_ZOOM = 12;
+  final double CAMERA_TILT = 20;
   final double CAMERA_BEARING = 30;
   Map<PolylineId, Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
   Set<Marker> markers = Set<Marker>();
-
+  var counter = new List.filled(10, null, growable: true);
   modelIsReady() async {
     if (DataStorage.containsKey(DataStorage.keyManifest)) {
       manifest = DataStorage.getManifest();
@@ -47,7 +53,10 @@ class ManifestViewModel extends BaseViewModel {
       job = DataStorage.getJob();
     }
 
+    await setCustomMarkers();
     await getLocationDetails();
+
+    print('${markerIcons.length} >>>>>>>>>>> Marker icons');
   }
 
   prettyObject(dynamic object) {
@@ -74,32 +83,53 @@ class ManifestViewModel extends BaseViewModel {
   }
 
   getLocationDetails() async {
-    manifest.manifest?.forEach((mani) {
-      mani.route!.forEach((rou) async {
-        ManifestItem item = new ManifestItem();
-        item.arrivalTime = rou.arriveAfter;
-        item.departureTime = rou.departBy;
-        item.longitude = getLocationCoordinates(rou.location).longitude;
-        item.latitude = getLocationCoordinates(rou.location).latitude;
-        await getAddress(item.latitude, item.longitude)
-            .then((value) => item.address = value.addressLine);
-        manifestList.add(item);
+    if (manifest.manifest![0].route!.isNotEmpty) {
+      manifest.manifest?.forEach((mani) {
+        mani.route!.asMap().forEach((index, rou) async {
+          ManifestItem item = new ManifestItem();
+          item.arrivalTime = rou.arriveAfter;
+          item.departureTime = rou.departBy;
+          item.longitude = getLocationCoordinates(rou.location).longitude;
+          item.latitude = getLocationCoordinates(rou.location).latitude;
+          await getAddress(item.latitude, item.longitude)
+              .then((value) => item.address = value.addressLine);
+          manifestList.add(item);
+          final Uint8List markerIcon;
+          if (index == 0 || index == mani.route!.length - 1) {
+            markerIcon = await getBytesFromAsset('assets/images/0.png', 50);
+          } else {
+            markerIcon =
+                await getBytesFromAsset('assets/images/$index.png', 50);
+          }
 
-        markers.add(Marker(
-            markerId: MarkerId(uuid.v4()),
-            position: LatLng(item.latitude!, item.longitude!),
-            infoWindow: InfoWindow(title: 'The title of the marker')));
-        polylineCoordinates.add(LatLng(item.latitude!, item.longitude!));
-        PolylineId id = PolylineId(uuid.v4());
-        Polyline polyline = Polyline(
-          polylineId: id,
-          color: primaryColor,
-          points: polylineCoordinates,
-          width: 4,
-        );
-        polylines[id] = polyline;
+          // final Marker marker = Marker(icon: BitmapDescriptor.fromBytes(markerIcon));
+
+          markers.add(
+            Marker(
+                markerId: MarkerId(uuid.v4()),
+                position: LatLng(item.latitude!, item.longitude!),
+                infoWindow: InfoWindow(title: '${item.address}'),
+                icon: BitmapDescriptor.fromBytes(markerIcon)),
+          );
+          polylineCoordinates.add(LatLng(item.latitude!, item.longitude!));
+          PolylineId id = PolylineId(uuid.v4());
+          Polyline polyline = Polyline(
+            polylineId: id,
+            color: primaryColor,
+            points: polylineCoordinates,
+            width: 4,
+          );
+          polylines[id] = polyline;
+        });
       });
-    });
+    } else {
+      _dialogService.showDialog(
+          title: 'Success!',
+          description:
+              'All consignments were dropped due to inconvenient time');
+
+      return;
+    }
 
     return manifestList;
   }
@@ -118,5 +148,36 @@ class ManifestViewModel extends BaseViewModel {
         await Geocoder.local.findAddressesFromCoordinates(coordinates);
 
     return addresses.first;
+  }
+
+  final markerKey = GlobalKey();
+
+  setCustomMarkers() async {
+    counter.asMap().forEach((index, image) async {
+      BitmapDescriptor iconPin = await BitmapDescriptor.fromAssetImage(
+          ImageConfiguration(devicePixelRatio: 1.0),
+          'assets/images/$index.png');
+      print(iconPin);
+      markerIcons.add(iconPin);
+    });
+  }
+
+  setCustomMarkersSizable() async {
+    counter.asMap().forEach((index, image) async {
+      Uint8List markerIcon =
+          await getBytesFromAsset('assets/images/$index.png', 100);
+      BitmapDescriptor iconPin = BitmapDescriptor.fromBytes(markerIcon);
+      markerIcons.add(iconPin);
+    });
+  }
+
+  Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
   }
 }

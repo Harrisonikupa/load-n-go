@@ -12,6 +12,7 @@ import 'package:stacked/stacked.dart';
 import '../models/orders.model.dart';
 import '../ui/views/deliveries/deliveries.view.dart';
 import '../ui/views/home/home.view.dart';
+import '../ui/views/manifest/manifest.view.dart';
 import '../ui/views/optimized-route-view/optimized-route.view.dart';
 import '../ui/views/order-information/order-information.view.dart';
 import '../ui/views/orders/orders.view.dart';
@@ -22,12 +23,14 @@ class Routes {
   static const String ordersView = '/orders-view';
   static const String orderInformationView = '/order-information-view';
   static const String optimizedRouteView = '/optimized-route-view';
+  static const String manifestView = '/manifest-view';
   static const all = <String>{
     homeView,
     deliveriesView,
     ordersView,
     orderInformationView,
     optimizedRouteView,
+    manifestView,
   };
 }
 
@@ -40,6 +43,7 @@ class StackedRouter extends RouterBase {
     RouteDef(Routes.ordersView, page: OrdersView),
     RouteDef(Routes.orderInformationView, page: OrderInformationView),
     RouteDef(Routes.optimizedRouteView, page: OptimizedRouteView),
+    RouteDef(Routes.manifestView, page: ManifestView),
   ];
   @override
   Map<Type, StackedRouteFactory> get pagesMap => _pagesMap;
@@ -77,6 +81,12 @@ class StackedRouter extends RouterBase {
     OptimizedRouteView: (data) {
       return MaterialPageRoute<dynamic>(
         builder: (context) => const OptimizedRouteView(),
+        settings: data,
+      );
+    },
+    ManifestView: (data) {
+      return MaterialPageRoute<dynamic>(
+        builder: (context) => const ManifestView(),
         settings: data,
       );
     },

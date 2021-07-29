@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:geocoding/geocoding.dart';
 import 'package:loadngo/app/app.locator.dart';
+import 'package:loadngo/app/app.router.dart';
 import 'package:loadngo/models/goloop/job/job-details.model.dart';
 import 'package:loadngo/models/goloop/job/job-solution.dart';
 import 'package:loadngo/models/goloop/job/job-status.model.dart';
@@ -19,6 +20,7 @@ import 'package:loadngo/models/order-with-location.model.dart';
 import 'package:loadngo/services/Thirdparty/goloop.service.dart';
 import 'package:loadngo/services/firebase/firestore.service.dart';
 import 'package:loadngo/shared/secrets.dart';
+import 'package:loadngo/shared/storage/shared-preferences.storage.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:uuid/uuid.dart';
@@ -89,7 +91,6 @@ class OptimizedRouteViewModel extends BaseViewModel {
         order.longitude = location.longitude;
         order.latitude = location.latitude;
         ordersWithCoordinates.add(order);
-        print('placing all in');
       });
     });
     return Future.delayed(Duration(seconds: 5), () => ordersWithCoordinates);
@@ -236,13 +237,16 @@ class OptimizedRouteViewModel extends BaseViewModel {
     // });
 
     // final object =
-    final prettyString = JsonEncoder.withIndent(" ").convert(job.toMap());
-    print(prettyString);
+
     var response = await _goloopService.postJob(job);
 
     if (response is SubmittedJob) {
+      // Job jobInstance = new Job();
+      // jobInstance.jobId = response.jobId;
+      // jobInstance.jobString = prettyObject(job.toMap());
+      // await _firestoreService.addJob(jobInstance);
+      DataStorage.setJob(job);
       await getSubmittedJobs();
-      print(response.toMap());
     } else {
       print('Could not do that');
     }
@@ -474,6 +478,9 @@ class OptimizedRouteViewModel extends BaseViewModel {
           if (manifestResult is Manifest) {
             print(prettyObject(manifestResult.toMap()));
             manifest = manifestResult;
+            DataStorage.setManifest(manifest);
+
+            navigationService.navigateTo(Routes.manifestView);
             // Route us to the map
           } else {
             print('Manifest not found');

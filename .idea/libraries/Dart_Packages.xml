@@ -317,6 +317,13 @@
             </list>
           </value>
         </entry>
+        <entry key="geocoder">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/geocoder-0.2.1/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="geocoding">
           <value>
             <list>
@@ -419,6 +426,13 @@
           <value>
             <list>
               <option value="$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/image-3.0.2/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="intl">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/intl-0.17.0/lib" />
             </list>
           </value>
         </entry>
@@ -880,6 +894,7 @@
       <root url="file://$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/flutter_polyline_points-1.0.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/flutter_svg-0.22.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/frontend_server_client-2.1.0/lib" />
+      <root url="file://$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/geocoder-0.2.1/lib" />
       <root url="file://$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/geocoding-2.0.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/geocoding_platform_interface-2.0.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/geolocator-7.2.0+1/lib" />
@@ -895,6 +910,7 @@
       <root url="file://$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/http_multi_server-3.0.1/lib" />
       <root url="file://$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/http_parser-4.0.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/image-3.0.2/lib" />
+      <root url="file://$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/intl-0.17.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/io-1.0.3/lib" />
       <root url="file://$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/js-0.6.3/lib" />
       <root url="file://$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/json_annotation-4.0.1/lib" />

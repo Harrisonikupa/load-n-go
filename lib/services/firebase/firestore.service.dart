@@ -2,15 +2,20 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:loadngo/models/goloop/single-models/job.model.dart';
 import 'package:loadngo/models/order-with-location.model.dart';
 import 'package:loadngo/models/orders.model.dart';
 
 class FirestoreService {
   final CollectionReference _orderCollectionReference =
       FirebaseFirestore.instance.collection('orders');
-
+  final CollectionReference _jobCollectionReference =
+      FirebaseFirestore.instance.collection('job');
   final StreamController<List<Order>> _orderController =
       StreamController<List<Order>>.broadcast();
+
+  final StreamController<List<Job>> _jobController =
+      StreamController<List<Job>>.broadcast();
   // Future createOrder(Order order) async {
   //   try {
   //     await _orderCollectionReference
@@ -183,5 +188,67 @@ class FirestoreService {
     }
   }
 
-  exportAsCSV() {}
+  Future addJob(Job job) async {
+    try {
+      await _jobCollectionReference.add(job);
+    } catch (e) {
+      // TODO: Find or create a way to repeat error handling without so much repeated code
+      if (e is PlatformException) {
+        return e.message;
+      }
+      return e.toString();
+    }
+  }
+
+  Future getJob(Job? job) async {
+    try {
+      var jobDocumentSnapshot =
+          await _jobCollectionReference.doc(job!.documentId).get();
+
+      return jobDocumentSnapshot;
+    } catch (e) {
+      // TODO: Find or create a way to repeat error handling without so much repeated code
+      if (e is PlatformException) {
+        print(e.message);
+        return e.message;
+      }
+      return e.toString();
+    }
+  }
+
+  Future getJobsWithoutListeners() async {
+    try {
+      var orderDocumentSnapshot = await _orderCollectionReference.get();
+      if (orderDocumentSnapshot.docs.isNotEmpty) {
+        return orderDocumentSnapshot.docs
+            .map((snapshot) => OrderWithLocation.fromJson(
+                snapshot.data() as Map<String, dynamic>, snapshot.id))
+            .where((mappedItem) => mappedItem.orderNumber != null)
+            .toList();
+      }
+    } catch (e) {
+      // TODO: Find or create a way to repeat error handling without so much repeated code
+      if (e is PlatformException) {
+        print(e.message);
+        return e.message;
+      }
+      return e.toString();
+    }
+  }
+
+  Stream listenToJobsRealTime() {
+    _jobCollectionReference.snapshots().listen((jobSnapshot) {
+      if (jobSnapshot.docs.isNotEmpty) {
+        var jobs = jobSnapshot.docs
+            .map((snapshot) => Job.fromMap(
+                snapshot.data() as Map<String, dynamic>, snapshot.id))
+            .where((mappedItem) => mappedItem.jobId != null)
+            .toList();
+
+        _jobController.add(jobs);
+      }
+    });
+
+    return _jobController.stream;
+  }
 }

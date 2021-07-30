@@ -167,24 +167,53 @@ class ManifestView extends StatelessWidget {
                               padding: new EdgeInsets.symmetric(
                                   vertical: getProportionateScreenWidth(10),
                                   horizontal: getProportionateScreenWidth(16)),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Icon(
-                                    Icons.bus_alert,
-                                    size: 16,
-                                    color: primaryColor,
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Icon(
+                                        Icons.access_time,
+                                        size: 16,
+                                        color: primaryColor,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        'Date: ${model.getDate(DateTime.now().toString())}',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: darkGreyColor,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                   SizedBox(
-                                    width: 5,
+                                    height: getProportionateScreenWidth(10),
                                   ),
-                                  Text(
-                                    'Driver: ${model.driverId}',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: darkGreyColor,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Icon(
+                                        Icons.time_to_leave,
+                                        size: 16,
+                                        color: primaryColor,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        'Driver: ${model.driverId}',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: darkGreyColor,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),

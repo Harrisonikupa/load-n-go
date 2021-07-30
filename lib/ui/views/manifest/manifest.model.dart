@@ -46,6 +46,12 @@ class ManifestViewModel extends BaseViewModel {
   Set<Marker> markers = Set<Marker>();
   var counter = new List.filled(100, null, growable: true);
   int? pageIndex = 0;
+  List<Color> polylineColors = [
+    primaryColor,
+    blueColor,
+    errorRedColor,
+    successGreenColor
+  ];
 
   modelIsReady() async {
     if (DataStorage.containsKey(DataStorage.keyManifest)) {
@@ -93,9 +99,8 @@ class ManifestViewModel extends BaseViewModel {
   getLocationDetails() async {
     setBusy(true);
     if (manifest.manifest![0].route!.isNotEmpty) {
-      manifest.manifest?.asMap().forEach((index, mani) {
+      manifest.manifest?.asMap().forEach((manifestIndex, mani) {
         List<ManifestItem> manifestList2 = <ManifestItem>[];
-        print('manifest number $index');
         mani.route!.asMap().forEach((index, rou) async {
           ManifestItem item = new ManifestItem();
           item.arrivalTime = rou.arriveAfter;
@@ -126,16 +131,16 @@ class ManifestViewModel extends BaseViewModel {
           PolylineId id = PolylineId(uuid.v4());
           Polyline polyline = Polyline(
             polylineId: id,
-            color: primaryColor,
+            color: polylineColors[manifestIndex],
             points: polylineCoordinates,
-            width: 4,
+            width: 2,
           );
+          print('$manifestIndex >>>>>>>>>>>>. manifest index');
           polylines[id] = polyline;
         });
         DriversManifest drivManifest = new DriversManifest();
         drivManifest.vehicle = mani.vehicle;
         drivManifest.manifestItems = manifestList2;
-        print('manifest length> >> > > > > >${manifestList2.length}');
 
         driversManifest.add(drivManifest);
       });
@@ -155,6 +160,13 @@ class ManifestViewModel extends BaseViewModel {
   getTime(date) {
     final formattedDate =
         new DateFormat().add_jm().format(DateTime.parse(date));
+
+    return formattedDate;
+  }
+
+  getDate(date) {
+    final formattedDate =
+        new DateFormat().add_yMMMd().format(DateTime.parse(date));
 
     return formattedDate;
   }

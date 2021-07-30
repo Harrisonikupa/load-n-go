@@ -92,7 +92,7 @@ class ManifestView extends StatelessWidget {
                                     width: 5,
                                   ),
                                   Text(
-                                    'Stops (${model.manifestList.length})',
+                                    'Drivers (${model.driversManifest.length})',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       color: model.currentTab == 0
@@ -163,123 +163,47 @@ class ManifestView extends StatelessWidget {
                         ],
                       ),
                       model.currentTab == 0
+                          ? Padding(
+                              padding: new EdgeInsets.symmetric(
+                                  vertical: getProportionateScreenWidth(10),
+                                  horizontal: getProportionateScreenWidth(16)),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    Icons.bus_alert,
+                                    size: 16,
+                                    color: primaryColor,
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    'Driver: ${model.driverId}',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: darkGreyColor,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : SizedBox(),
+                      model.currentTab == 0
                           ? Expanded(
                               child: Padding(
                                 padding: new EdgeInsets.all(
                                     getProportionateScreenWidth(8)),
-                                child: ListView.builder(
-                                  itemCount: model.manifestList.length,
-                                  itemBuilder: (context, index) => Container(
-                                    margin: new EdgeInsets.only(
-                                      bottom: getProportionateScreenWidth(10),
-                                    ),
-                                    padding: new EdgeInsets.all(
-                                      getProportionateScreenWidth(20),
-                                    ),
-                                    width: double.infinity,
-                                    height: getProportionateScreenHeight(100),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      border: Border.all(
-                                          color: primaryColor, width: 2),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        index == 0 ||
-                                                (index ==
-                                                    model.manifestList.length -
-                                                        1)
-                                            ? Image.asset(
-                                                'assets/images/0.png',
-                                                width:
-                                                    getProportionateScreenWidth(
-                                                        30),
-                                                height:
-                                                    getProportionateScreenWidth(
-                                                        30),
-                                              )
-                                            : Container(
-                                                height:
-                                                    getProportionateScreenWidth(
-                                                        30),
-                                                width:
-                                                    getProportionateScreenWidth(
-                                                        30),
-                                                child: Align(
-                                                  alignment: Alignment.center,
-                                                  child: Text(
-                                                    '$index',
-                                                    style: TextStyle(
-                                                      color: primaryColor,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize:
-                                                          getProportionateScreenWidth(
-                                                              18),
-                                                    ),
-                                                  ),
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  color: whiteColor,
-                                                  border: Border.all(
-                                                      color: primaryColor,
-                                                      width: 3),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          100),
-                                                ),
-                                              ),
-                                        SizedBox(
-                                          width:
-                                              getProportionateScreenWidth(20),
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(
-                                              height:
-                                                  getProportionateScreenHeight(
-                                                      10),
-                                            ),
-                                            Padding(
-                                              padding: new EdgeInsets.only(
-                                                  right: 30),
-                                              child: FittedBox(
-                                                child: Text(
-                                                  '${model.manifestList[index].address}',
-                                                  textAlign: TextAlign.left,
-                                                  style: TextStyle(
-                                                    fontSize:
-                                                        getProportionateScreenWidth(
-                                                            12),
-                                                    fontWeight: FontWeight.w800,
-                                                    color: blackColor,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height:
-                                                  getProportionateScreenWidth(
-                                                      8),
-                                            ),
-                                            Text(
-                                              '${model.getTime(model.manifestList[index].arrivalTime)} - ${model.getTime(model.manifestList[index].departureTime)}',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize:
-                                                      getProportionateScreenWidth(
-                                                          12),
-                                                  color: borderGreyColor),
-                                            )
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ),
+                                child: PageView.builder(
+                                  itemCount: model.driversManifest.length,
+                                  onPageChanged: (value) =>
+                                      model.changeDriverId(value),
+                                  itemBuilder: (context, index) =>
+                                      model.manifestListWidget(
+                                          model.driversManifest[index]
+                                              .manifestItems!,
+                                          context),
                                 ),
                               ),
                             )

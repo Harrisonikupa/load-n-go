@@ -205,6 +205,13 @@
             </list>
           </value>
         </entry>
+        <entry key="dots_indicator">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/dots_indicator-2.0.0/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="ext_storage">
           <value>
             <list>
@@ -433,6 +440,13 @@
           <value>
             <list>
               <option value="$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/intl-0.17.0/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="introduction_screen">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/introduction_screen-2.1.0/lib" />
             </list>
           </value>
         </entry>
@@ -881,6 +895,7 @@
       <root url="file://$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/csv-5.0.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/cupertino_icons-1.0.3/lib" />
       <root url="file://$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/dart_style-2.0.1/lib" />
+      <root url="file://$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/dots_indicator-2.0.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/ext_storage-1.0.3/lib" />
       <root url="file://$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/fake_async-1.2.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/ffi-1.1.2/lib" />
@@ -911,6 +926,7 @@
       <root url="file://$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/http_parser-4.0.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/image-3.0.2/lib" />
       <root url="file://$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/intl-0.17.0/lib" />
+      <root url="file://$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/introduction_screen-2.1.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/io-1.0.3/lib" />
       <root url="file://$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/js-0.6.3/lib" />
       <root url="file://$PROJECT_DIR$/../../../../src/flutter 2.0/.pub-cache/hosted/pub.dartlang.org/json_annotation-4.0.1/lib" />

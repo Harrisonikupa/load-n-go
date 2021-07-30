@@ -11,10 +11,12 @@ import 'package:intl/intl.dart';
 import 'package:loadngo/app/app.locator.dart';
 import 'package:loadngo/models/goloop/job/job-details.model.dart';
 import 'package:loadngo/models/goloop/job/manifest.model.dart';
+import 'package:loadngo/models/goloop/single-models/drivers-manifest.model.dart';
 import 'package:loadngo/models/goloop/single-models/manifest-item.model.dart';
 import 'package:loadngo/services/Thirdparty/goloop.service.dart';
 import 'package:loadngo/services/firebase/firestore.service.dart';
 import 'package:loadngo/shared/storage/shared-preferences.storage.dart';
+import 'package:loadngo/ui/responsiveness/sizing.config.dart';
 import 'package:loadngo/ui/styles/colors.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -29,18 +31,21 @@ class ManifestViewModel extends BaseViewModel {
   List<BitmapDescriptor> markerIcons = <BitmapDescriptor>[];
 
   var uuid = Uuid();
+  var driverId;
   int? currentTab = 0;
   Manifest manifest = new Manifest();
   JobDetails job = new JobDetails();
   List<ManifestItem> manifestList = <ManifestItem>[];
+  List<DriversManifest> driversManifest = <DriversManifest>[];
   late GoogleMapController controller;
-  final double CAMERA_ZOOM = 15;
+  final double CAMERA_ZOOM = 12;
   final double CAMERA_TILT = 20;
   final double CAMERA_BEARING = 30;
   Map<PolylineId, Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
   Set<Marker> markers = Set<Marker>();
   var counter = new List.filled(100, null, growable: true);
+  int? pageIndex = 0;
 
   modelIsReady() async {
     if (DataStorage.containsKey(DataStorage.keyManifest)) {
@@ -58,6 +63,8 @@ class ManifestViewModel extends BaseViewModel {
     }
     // await setCustomMarkers();
     await getLocationDetails();
+
+    driverId = driversManifest[0].vehicle;
   }
 
   prettyObject(dynamic object) {
@@ -86,7 +93,9 @@ class ManifestViewModel extends BaseViewModel {
   getLocationDetails() async {
     setBusy(true);
     if (manifest.manifest![0].route!.isNotEmpty) {
-      manifest.manifest?.forEach((mani) {
+      manifest.manifest?.asMap().forEach((index, mani) {
+        List<ManifestItem> manifestList2 = <ManifestItem>[];
+        print('manifest number $index');
         mani.route!.asMap().forEach((index, rou) async {
           ManifestItem item = new ManifestItem();
           item.arrivalTime = rou.arriveAfter;
@@ -96,6 +105,7 @@ class ManifestViewModel extends BaseViewModel {
           await getAddress(item.latitude, item.longitude)
               .then((value) => item.address = value.addressLine);
           manifestList.add(item);
+          manifestList2.add(item);
           notifyListeners();
           final Uint8List markerIcon;
           if (index == 0 || index == mani.route!.length - 1) {
@@ -104,8 +114,6 @@ class ManifestViewModel extends BaseViewModel {
             markerIcon =
                 await getBytesFromAsset('assets/images/$index.png', 70);
           }
-
-          // final Marker marker = Marker(icon: BitmapDescriptor.fromBytes(markerIcon));
 
           markers.add(
             Marker(
@@ -124,6 +132,12 @@ class ManifestViewModel extends BaseViewModel {
           );
           polylines[id] = polyline;
         });
+        DriversManifest drivManifest = new DriversManifest();
+        drivManifest.vehicle = mani.vehicle;
+        drivManifest.manifestItems = manifestList2;
+        print('manifest length> >> > > > > >${manifestList2.length}');
+
+        driversManifest.add(drivManifest);
       });
     } else {
       _dialogService.showDialog(
@@ -182,5 +196,105 @@ class ManifestViewModel extends BaseViewModel {
     return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
         .buffer
         .asUint8List();
+  }
+
+  Widget manifestListWidget(List<ManifestItem> manifest, context) {
+    driversManifest.forEach((element) {
+      print(element.manifestItems!.length);
+    });
+    // print(manifest);
+    SizeConfig().init(context);
+    return Container(
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: manifest.length,
+        itemBuilder: (context, index) => Container(
+          margin: new EdgeInsets.only(
+            bottom: getProportionateScreenWidth(10),
+          ),
+          padding: new EdgeInsets.all(
+            getProportionateScreenWidth(20),
+          ),
+          width: double.infinity,
+          height: getProportionateScreenHeight(100),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(color: primaryColor, width: 2),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              index == 0 || (index == manifest.length - 1)
+                  ? Image.asset(
+                      'assets/images/0.png',
+                      width: getProportionateScreenWidth(30),
+                      height: getProportionateScreenWidth(30),
+                    )
+                  : Container(
+                      height: getProportionateScreenWidth(30),
+                      width: getProportionateScreenWidth(30),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          '$index',
+                          style: TextStyle(
+                            color: primaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: getProportionateScreenWidth(18),
+                          ),
+                        ),
+                      ),
+                      decoration: BoxDecoration(
+                        color: whiteColor,
+                        border: Border.all(color: primaryColor, width: 3),
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                    ),
+              SizedBox(
+                width: getProportionateScreenWidth(20),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: getProportionateScreenHeight(10),
+                  ),
+                  Padding(
+                    padding: new EdgeInsets.only(right: 30),
+                    child: FittedBox(
+                      child: Text(
+                        '${manifest[index].address}',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: getProportionateScreenWidth(12),
+                          fontWeight: FontWeight.w800,
+                          color: blackColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: getProportionateScreenWidth(8),
+                  ),
+                  Text(
+                    '${getTime(manifest[index].arrivalTime)} - ${getTime(manifest[index].departureTime)}',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: getProportionateScreenWidth(12),
+                        color: borderGreyColor),
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  changeDriverId(value) async {
+    driverId = driversManifest[value].vehicle;
+    pageIndex = value;
+    notifyListeners();
   }
 }

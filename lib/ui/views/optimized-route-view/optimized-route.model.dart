@@ -44,6 +44,8 @@ class OptimizedRouteViewModel extends BaseViewModel {
 
   var depotLatitude;
   var depotLongitude;
+  var depotLatitude2;
+  var depotLongitude2;
   modelIsReady() async {
     setBusy(true);
     listenToJobs();
@@ -100,12 +102,22 @@ class OptimizedRouteViewModel extends BaseViewModel {
     List<Location> depotLocation =
         await locationFromAddress(refinedOrders[0].pickupPostalCode!);
 
+    List<Location> depotLocation2 = await locationFromAddress('189969');
+
     Future.delayed(
         Duration(seconds: 1),
         () => {
               depotLocation.forEach((location) {
                 depotLongitude = location.longitude;
                 depotLatitude = location.latitude;
+              })
+            });
+    Future.delayed(
+        Duration(seconds: 1),
+        () => {
+              depotLocation2.forEach((location) {
+                depotLongitude2 = location.longitude;
+                depotLatitude2 = location.latitude;
               })
             });
 
@@ -167,6 +179,7 @@ class OptimizedRouteViewModel extends BaseViewModel {
       lastTimeAdded = lastTimeAdded! + increase;
     });
 
+    // Vehicle One
     Vehicle vehicle = new Vehicle();
     vehicle.id = uuid.v4().toString();
     vehicle.type = 'General';
@@ -202,8 +215,47 @@ class OptimizedRouteViewModel extends BaseViewModel {
     vehicle.pricePerDeliveryCents = 0;
     vehicle.pricePerKmCents = 2000;
     vehicle.pricePerHourCents = 0;
-    vehicle.maxDistanceMetres = 150000;
+    vehicle.maxDistanceMetres = 20000;
     vehicles.add(vehicle);
+
+    // Vehicle Two
+    Vehicle vehicleTwo = new Vehicle();
+    vehicleTwo.id = uuid.v4().toString();
+    vehicleTwo.type = 'General';
+    vehicleTwo.locationStartId = depotLongLat.id;
+    vehicleTwo.locationEndId = depotLongLat.id;
+    vehicleTwo.breakDurationMinutes = 0;
+    vehicleTwo.breakTimeWindowStart = convertDateString(
+        '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 730);
+    vehicleTwo.breakTimeWindowEnd = convertDateString(
+        '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 730);
+    vehicleTwo.availableFromUtc = convertDateString(
+        '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 0);
+    vehicleTwo.availableUntilUtc = convertDateString(
+      '${refinedOrders[0].pickupDate}${Secrets.date_suffix}',
+      1000,
+    );
+    Container containerTwo = new Container();
+    containerTwo.type = uuid.v4().toString();
+    Capacity capacityTwo = new Capacity();
+    capacityTwo.type = uuid.v4().toString();
+    capacityTwo.type = 'weight';
+    capacityTwo.units = 'kg';
+    capacityTwo.maximum = 250;
+    containerTwo.capacities = [capacity];
+    containerTwo.type = 'generic';
+    vehicleTwo.containers = [container];
+    // vehicle.fixedFeatures = [''];
+    // VisitableLocationsForFeature property = new VisitableLocationsForFeature();
+    // property.property1 = [''];
+    // property.property2 = [''];
+    // vehicle.visitableLocationsForFeature = property;
+
+    vehicleTwo.pricePerDeliveryCents = 0;
+    vehicleTwo.pricePerKmCents = 2000;
+    vehicleTwo.pricePerHourCents = 0;
+    vehicleTwo.maxDistanceMetres = 20000;
+    vehicles.add(vehicleTwo);
 
     // Setting priority
     Priority priority = new Priority();
@@ -470,6 +522,8 @@ class OptimizedRouteViewModel extends BaseViewModel {
           var manifestResult =
               await _goloopService.getJobManifest(jobId, solution.solutionId);
           if (manifestResult is Manifest) {
+            print(
+                'Manifest result >>>>>>>>>>> ${prettyObject(manifestResult.toMap())}');
             await DataStorage.setManifest(manifestResult);
             navigationService.navigateTo(Routes.manifestView);
             // Route us to the map

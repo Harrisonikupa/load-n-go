@@ -46,6 +46,7 @@ class OptimizedRouteViewModel extends BaseViewModel {
   var depotLongitude;
   var depotLatitude2;
   var depotLongitude2;
+
   modelIsReady() async {
     setBusy(true);
     listenToJobs();
@@ -99,8 +100,7 @@ class OptimizedRouteViewModel extends BaseViewModel {
     List<Priority> priorities = <Priority>[];
     var uuid = Uuid();
 
-    List<Location> depotLocation =
-        await locationFromAddress(refinedOrders[0].pickupPostalCode!);
+    List<Location> depotLocation = await locationFromAddress('189969');
 
     List<Location> depotLocation2 = await locationFromAddress('189969');
 
@@ -202,7 +202,7 @@ class OptimizedRouteViewModel extends BaseViewModel {
     capacity.type = uuid.v4().toString();
     capacity.type = 'weight';
     capacity.units = 'kg';
-    capacity.maximum = 250;
+    capacity.maximum = 750;
     container.capacities = [capacity];
     container.type = 'generic';
     vehicle.containers = [container];
@@ -215,47 +215,47 @@ class OptimizedRouteViewModel extends BaseViewModel {
     vehicle.pricePerDeliveryCents = 0;
     vehicle.pricePerKmCents = 2000;
     vehicle.pricePerHourCents = 0;
-    vehicle.maxDistanceMetres = 20000;
+    vehicle.maxDistanceMetres = 500000;
     vehicles.add(vehicle);
 
-    // Vehicle Two
-    Vehicle vehicleTwo = new Vehicle();
-    vehicleTwo.id = uuid.v4().toString();
-    vehicleTwo.type = 'General';
-    vehicleTwo.locationStartId = depotLongLat.id;
-    vehicleTwo.locationEndId = depotLongLat.id;
-    vehicleTwo.breakDurationMinutes = 0;
-    vehicleTwo.breakTimeWindowStart = convertDateString(
-        '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 730);
-    vehicleTwo.breakTimeWindowEnd = convertDateString(
-        '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 730);
-    vehicleTwo.availableFromUtc = convertDateString(
-        '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 0);
-    vehicleTwo.availableUntilUtc = convertDateString(
-      '${refinedOrders[0].pickupDate}${Secrets.date_suffix}',
-      1000,
-    );
-    Container containerTwo = new Container();
-    containerTwo.type = uuid.v4().toString();
-    Capacity capacityTwo = new Capacity();
-    capacityTwo.type = uuid.v4().toString();
-    capacityTwo.type = 'weight';
-    capacityTwo.units = 'kg';
-    capacityTwo.maximum = 250;
-    containerTwo.capacities = [capacity];
-    containerTwo.type = 'generic';
-    vehicleTwo.containers = [container];
-    // vehicle.fixedFeatures = [''];
-    // VisitableLocationsForFeature property = new VisitableLocationsForFeature();
-    // property.property1 = [''];
-    // property.property2 = [''];
-    // vehicle.visitableLocationsForFeature = property;
-
-    vehicleTwo.pricePerDeliveryCents = 0;
-    vehicleTwo.pricePerKmCents = 2000;
-    vehicleTwo.pricePerHourCents = 0;
-    vehicleTwo.maxDistanceMetres = 20000;
-    vehicles.add(vehicleTwo);
+    // // Vehicle Two
+    // Vehicle vehicleTwo = new Vehicle();
+    // vehicleTwo.id = uuid.v4().toString();
+    // vehicleTwo.type = 'General';
+    // vehicleTwo.locationStartId = depotLongLat.id;
+    // vehicleTwo.locationEndId = depotLongLat.id;
+    // vehicleTwo.breakDurationMinutes = 0;
+    // vehicleTwo.breakTimeWindowStart = convertDateString(
+    //     '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 730);
+    // vehicleTwo.breakTimeWindowEnd = convertDateString(
+    //     '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 730);
+    // vehicleTwo.availableFromUtc = convertDateString(
+    //     '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 0);
+    // vehicleTwo.availableUntilUtc = convertDateString(
+    //   '${refinedOrders[0].pickupDate}${Secrets.date_suffix}',
+    //   1000,
+    // );
+    // Container containerTwo = new Container();
+    // containerTwo.type = uuid.v4().toString();
+    // Capacity capacityTwo = new Capacity();
+    // capacityTwo.type = uuid.v4().toString();
+    // capacityTwo.type = 'weight';
+    // capacityTwo.units = 'kg';
+    // capacityTwo.maximum = 250;
+    // containerTwo.capacities = [capacity];
+    // containerTwo.type = 'generic';
+    // vehicleTwo.containers = [container];
+    // // vehicle.fixedFeatures = [''];
+    // // VisitableLocationsForFeature property = new VisitableLocationsForFeature();
+    // // property.property1 = [''];
+    // // property.property2 = [''];
+    // // vehicle.visitableLocationsForFeature = property;
+    //
+    // vehicleTwo.pricePerDeliveryCents = 0;
+    // vehicleTwo.pricePerKmCents = 2000;
+    // vehicleTwo.pricePerHourCents = 0;
+    // vehicleTwo.maxDistanceMetres = 20000;
+    // vehicles.add(vehicleTwo);
 
     // Setting priority
     Priority priority = new Priority();

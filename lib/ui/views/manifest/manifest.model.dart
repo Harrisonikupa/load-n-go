@@ -137,9 +137,12 @@ class ManifestViewModel extends BaseViewModel {
           );
           print('$manifestIndex >>>>>>>>>>>>. manifest index');
           polylines[id] = polyline;
+          notifyListeners();
         });
         DriversManifest drivManifest = new DriversManifest();
         drivManifest.vehicle = mani.vehicle;
+        // drivManifest.totalDistance =
+        //     (mani.distanceTotalMetres / 1000.toStringAsFixed(2));
         drivManifest.manifestItems = manifestList2;
 
         driversManifest.add(drivManifest);

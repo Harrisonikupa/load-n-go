@@ -206,7 +206,7 @@ class ManifestView extends StatelessWidget {
                                         width: 5,
                                       ),
                                       Text(
-                                        'Driver: ${model.driverId}',
+                                        'Driver ID: ${model.driverId}',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           color: darkGreyColor,

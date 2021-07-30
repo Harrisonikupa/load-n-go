@@ -188,7 +188,6 @@ class FirestoreService {
   }
 
   Future addJob(Job job) async {
-    print('${job.toMap()} >>>>>>>>. what i want to save');
     try {
       await _jobCollectionReference.add(job.toMap());
     } catch (e) {

@@ -356,6 +356,7 @@ class OrdersViewModel extends BaseViewModel {
   }
 
   getAuthorizationToken() async {
+    setBusy(true);
     // Get authorization to goloop api
     AccessTokenRequest request = new AccessTokenRequest();
     request.username = Secrets.goloop_username;
@@ -366,5 +367,6 @@ class OrdersViewModel extends BaseViewModel {
     if (authorizationResponse is AccessTokenResponse) {
       DataStorage.setAccessToken(authorizationResponse);
     }
+    setBusy(false);
   }
 }

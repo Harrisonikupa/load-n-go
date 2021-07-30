@@ -58,7 +58,7 @@ class GoloopService {
       submittedJobResponse = SubmittedJob.fromMap(parsed);
     } else {
       _dialogService.showDialog(title: 'Error', description: parsed['Message']);
-      throw Exception(parsed);
+      return '';
     }
     return submittedJobResponse;
   }

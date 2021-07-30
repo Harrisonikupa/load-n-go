@@ -34,13 +34,13 @@ class ManifestViewModel extends BaseViewModel {
   JobDetails job = new JobDetails();
   List<ManifestItem> manifestList = <ManifestItem>[];
   late GoogleMapController controller;
-  final double CAMERA_ZOOM = 12;
+  final double CAMERA_ZOOM = 15;
   final double CAMERA_TILT = 20;
   final double CAMERA_BEARING = 30;
   Map<PolylineId, Polyline> polylines = {};
   List<LatLng> polylineCoordinates = [];
   Set<Marker> markers = Set<Marker>();
-  var counter = new List.filled(10, null, growable: true);
+  var counter = new List.filled(100, null, growable: true);
 
   modelIsReady() async {
     if (DataStorage.containsKey(DataStorage.keyManifest)) {
@@ -50,14 +50,14 @@ class ManifestViewModel extends BaseViewModel {
           title: 'Error!', description: 'Unable to fetch manifest');
       navigationService.back();
     }
+
     if (DataStorage.containsKey(DataStorage.keyJob)) {
       job = DataStorage.getJob();
+    } else {
+      print('get job');
     }
-
-    await setCustomMarkers();
+    // await setCustomMarkers();
     await getLocationDetails();
-
-    print('${markerIcons.length} >>>>>>>>>>> Marker icons');
   }
 
   prettyObject(dynamic object) {
@@ -84,6 +84,7 @@ class ManifestViewModel extends BaseViewModel {
   }
 
   getLocationDetails() async {
+    setBusy(true);
     if (manifest.manifest![0].route!.isNotEmpty) {
       manifest.manifest?.forEach((mani) {
         mani.route!.asMap().forEach((index, rou) async {
@@ -95,12 +96,13 @@ class ManifestViewModel extends BaseViewModel {
           await getAddress(item.latitude, item.longitude)
               .then((value) => item.address = value.addressLine);
           manifestList.add(item);
+          notifyListeners();
           final Uint8List markerIcon;
           if (index == 0 || index == mani.route!.length - 1) {
-            markerIcon = await getBytesFromAsset('assets/images/0.png', 50);
+            markerIcon = await getBytesFromAsset('assets/images/0.png', 70);
           } else {
             markerIcon =
-                await getBytesFromAsset('assets/images/$index.png', 50);
+                await getBytesFromAsset('assets/images/$index.png', 70);
           }
 
           // final Marker marker = Marker(icon: BitmapDescriptor.fromBytes(markerIcon));
@@ -129,9 +131,10 @@ class ManifestViewModel extends BaseViewModel {
           description:
               'All consignments were dropped due to inconvenient time');
 
+      setBusy(false);
       return;
     }
-
+    setBusy(false);
     return manifestList;
   }
 
@@ -153,23 +156,23 @@ class ManifestViewModel extends BaseViewModel {
 
   final markerKey = GlobalKey();
 
-  setCustomMarkers() async {
-    counter.asMap().forEach((index, image) async {
-      BitmapDescriptor iconPin = await BitmapDescriptor.fromAssetImage(
-          ImageConfiguration(devicePixelRatio: 1.0),
-          'assets/images/$index.png');
-      markerIcons.add(iconPin);
-    });
-  }
+  // setCustomMarkers() async {
+  //   counter.asMap().forEach((index, image) async {
+  //     BitmapDescriptor iconPin = await BitmapDescriptor.fromAssetImage(
+  //         ImageConfiguration(devicePixelRatio: 1.0),
+  //         'assets/images/$index.png');
+  //     markerIcons.add(iconPin);
+  //   });
+  // }
 
-  setCustomMarkersSizable() async {
-    counter.asMap().forEach((index, image) async {
-      Uint8List markerIcon =
-          await getBytesFromAsset('assets/images/$index.png', 100);
-      BitmapDescriptor iconPin = BitmapDescriptor.fromBytes(markerIcon);
-      markerIcons.add(iconPin);
-    });
-  }
+  // setCustomMarkersSizable() async {
+  //   counter.asMap().forEach((index, image) async {
+  //     Uint8List markerIcon =
+  //         await getBytesFromAsset('assets/images/$index.png', 120);
+  //     BitmapDescriptor iconPin = BitmapDescriptor.fromBytes(markerIcon);
+  //     markerIcons.add(iconPin);
+  //   });
+  // }
 
   Future<Uint8List> getBytesFromAsset(String path, int width) async {
     ByteData data = await rootBundle.load(path);

@@ -45,6 +45,7 @@ class OptimizedRouteViewModel extends BaseViewModel {
   var depotLatitude;
   var depotLongitude;
   modelIsReady() async {
+    setBusy(true);
     listenToJobs();
     await fetchOrders();
     // await getSubmittedJobs();
@@ -52,6 +53,7 @@ class OptimizedRouteViewModel extends BaseViewModel {
     if (response is List<OrderWithLocation>) {
       _refinedOrders = response;
     }
+    setBusy(false);
   }
 
   Future fetchOrders() async {
@@ -85,6 +87,7 @@ class OptimizedRouteViewModel extends BaseViewModel {
   }
 
   createJob() async {
+    setBusy(true);
     int clientServiceTime = 10;
     JobDetails job = new JobDetails();
     ModelOptions modelOptions = new ModelOptions();
@@ -236,8 +239,10 @@ class OptimizedRouteViewModel extends BaseViewModel {
       // DataStorage.setJob(job);
       // await getSubmittedJobs();
     } else {
+      setBusy(false);
       print('Could not do that');
     }
+    setBusy(false);
   }
 
   convertDateString(dateString, minuteToAdd) {
@@ -447,6 +452,7 @@ class OptimizedRouteViewModel extends BaseViewModel {
   }*/
 
   getSolution(index) async {
+    setBusy(true);
     int? jobId = jobs[index].jobId;
     JobDetails jobDetails = new JobDetails();
     var problemForJobResult = await _goloopService.getProblemForJob(jobId);
@@ -479,6 +485,8 @@ class OptimizedRouteViewModel extends BaseViewModel {
         }
       }
     }
+
+    setBusy(false);
   }
 
   void listenToJobs() {

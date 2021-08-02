@@ -99,7 +99,7 @@ class OptimizedRouteViewModel extends BaseViewModel {
 
   createJob() async {
     setBusy(true);
-    int clientServiceTime = 15;
+    int clientServiceTime = 10;
     JobDetails job = new JobDetails();
     ModelOptions modelOptions = new ModelOptions();
     List<Consignment> consignments = <Consignment>[];
@@ -121,11 +121,11 @@ class OptimizedRouteViewModel extends BaseViewModel {
 
     // Populate model options
     modelOptions.computeTimeMilliseconds = 25000;
-    modelOptions.lateHourlyPenaltyCents = 0;
+    modelOptions.lateHourlyPenaltyCents = 1000;
     modelOptions.workingTimeLimitMinutes = 1020;
     modelOptions.timeWindows = 'soft';
     modelOptions.performBreaks = false;
-    modelOptions.nodeSlackTimeMinutes = 30;
+    modelOptions.nodeSlackTimeMinutes = 10;
     modelOptions.firstSolutionStrategy = null;
     modelOptions.localSearchMetaheuristic = null;
 
@@ -140,7 +140,7 @@ class OptimizedRouteViewModel extends BaseViewModel {
     locations.add(depotLongLat);
 
     int? lastTimeAdded = 0;
-    const increase = 20;
+    const increase = 15;
     refinedOrders.asMap().forEach((index, order) {
       Locations location = new Locations();
       location.id = uuid.v4().toString();
@@ -170,7 +170,7 @@ class OptimizedRouteViewModel extends BaseViewModel {
       CapacitiesUsed capacitiesUsed = new CapacitiesUsed();
       capacitiesUsed.type = 'weight';
       capacitiesUsed.units = 'kg';
-      capacitiesUsed.used = 1;
+      capacitiesUsed.used = order.quantity;
       consignment.capacitiesUsed = [capacitiesUsed];
       consignment.vehicleContainerTypeRequired = 'generic';
       consignments.add(consignment);
@@ -213,7 +213,7 @@ class OptimizedRouteViewModel extends BaseViewModel {
     vehicle.pricePerDeliveryCents = 0;
     vehicle.pricePerKmCents = 2000;
     vehicle.pricePerHourCents = 0;
-    vehicle.maxDistanceMetres = 40000;
+    vehicle.maxDistanceMetres = 500000;
     vehicles.add(vehicle);
 
     // Vehicle Two
@@ -258,7 +258,7 @@ class OptimizedRouteViewModel extends BaseViewModel {
     // Setting priority
     Priority priority = new Priority();
     priority.id = 'standard';
-    priority.penaltyFactor = 1;
+    priority.penaltyFactor = 10;
     priorities.add(priority);
 
     job.modelOptions = modelOptions;

@@ -170,7 +170,7 @@ class GoloopService {
     var parsed = json.decode(response.body);
 
     if (response.statusCode == 200) {
-      // print('Manifest result >>>>>>>>>>> ${prettyObject(parsed)}');
+      print('Manifest result >>>>>>>>>>> ${prettyObject(parsed)}');
       manifest = Manifest.fromMap(parsed);
     } else {
       print('Error >>>>>>>>>>>>>');

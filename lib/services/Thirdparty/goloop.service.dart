@@ -17,7 +17,7 @@ class GoloopService {
   var client = new http.Client();
   DialogService _dialogService = locator<DialogService>();
   final headers = <String, String>{};
-  AccessTokenResponse accessToken = DataStorage.getAccessToken();
+
   // Get access token to make requests
   Future getAccessToken(AccessTokenRequest request) async {
     AccessTokenResponse responseBody = new AccessTokenResponse();
@@ -44,6 +44,8 @@ class GoloopService {
 
   // Post a new Job
   Future postJob(JobDetails request) async {
+    AccessTokenResponse accessToken = DataStorage.getAccessToken();
+
     headers['Content-Type'] = 'application/json';
     headers['Authorization'] = 'Bearer ${accessToken.accessToken}';
     SubmittedJob submittedJobResponse = new SubmittedJob();
@@ -65,6 +67,8 @@ class GoloopService {
   }
 
   Future<List<SubmittedJob>> listOfJobs() async {
+    AccessTokenResponse accessToken = DataStorage.getAccessToken();
+
     headers['Content-Type'] = 'application/json';
     headers['Authorization'] = 'Bearer ${accessToken.accessToken}';
     var jobs = <SubmittedJob>[];
@@ -81,6 +85,8 @@ class GoloopService {
   }
 
   Future getProblemForJob(jobId) async {
+    AccessTokenResponse accessToken = DataStorage.getAccessToken();
+
     headers['Content-Type'] = 'application/json';
     headers['Authorization'] = 'Bearer ${accessToken.accessToken}';
     dynamic problemForJob;
@@ -101,6 +107,8 @@ class GoloopService {
   }
 
   Future getSolutionForJob(jobId) async {
+    AccessTokenResponse accessToken = DataStorage.getAccessToken();
+
     headers['Content-Type'] = 'application/json';
     headers['Authorization'] = 'Bearer ${accessToken.accessToken}';
     dynamic solutionForJob;
@@ -127,6 +135,8 @@ class GoloopService {
   }
 
   Future getStatusForSolution(jobId, solutionId) async {
+    AccessTokenResponse accessToken = DataStorage.getAccessToken();
+
     headers['Content-Type'] = 'application/json';
     headers['Authorization'] = 'Bearer ${accessToken.accessToken}';
     dynamic status;
@@ -147,6 +157,8 @@ class GoloopService {
   }
 
   Future getJobManifest(jobId, solutionId) async {
+    AccessTokenResponse accessToken = DataStorage.getAccessToken();
+
     headers['Content-Type'] = 'application/json';
     headers['Authorization'] = 'Bearer ${accessToken.accessToken}';
     dynamic manifest;

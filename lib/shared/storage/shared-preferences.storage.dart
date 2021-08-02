@@ -20,6 +20,7 @@ class DataStorage {
 
   static getAccessToken() {
     String? accessToken = _preferences.getString(keyAccessToken);
+    print(accessToken);
     AccessTokenResponse data =
         AccessTokenResponse.fromMap(jsonDecode(accessToken!));
 

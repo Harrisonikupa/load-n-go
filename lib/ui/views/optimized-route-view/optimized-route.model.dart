@@ -32,7 +32,12 @@ class OptimizedRouteViewModel extends BaseViewModel {
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final DialogService _dialogService = locator<DialogService>();
   final GoloopService _goloopService = locator<GoloopService>();
-
+  void navigateBack() => navigationService.back();
+  final formKey = GlobalKey<FormState>();
+  var availableFromController = new TextEditingController();
+  var availableUntilController = new TextEditingController();
+  var maximumCapacityController = new TextEditingController();
+  var maximumDistanceController = new TextEditingController();
   List<OrderWithLocation> _orders = [];
   List<OrderWithLocation> get orders => _orders;
 
@@ -212,43 +217,43 @@ class OptimizedRouteViewModel extends BaseViewModel {
     vehicles.add(vehicle);
 
     // Vehicle Two
-    Vehicle vehicleTwo = new Vehicle();
-    vehicleTwo.id = uuid.v4().toString();
-    vehicleTwo.type = 'General';
-    vehicleTwo.locationStartId = depotLongLat.id;
-    vehicleTwo.locationEndId = depotLongLat.id;
-    vehicleTwo.breakDurationMinutes = 0;
-    vehicleTwo.breakTimeWindowStart = convertDateString(
-        '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 730);
-    vehicleTwo.breakTimeWindowEnd = convertDateString(
-        '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 730);
-    vehicleTwo.availableFromUtc = convertDateString(
-        '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 0);
-    vehicleTwo.availableUntilUtc = convertDateString(
-      '${refinedOrders[0].pickupDate}${Secrets.date_suffix}',
-      1000,
-    );
-    Containerr containerTwo = new Containerr();
-    containerTwo.type = uuid.v4().toString();
-    Capacity capacityTwo = new Capacity();
-    capacityTwo.type = uuid.v4().toString();
-    capacityTwo.type = 'weight';
-    capacityTwo.units = 'kg';
-    capacityTwo.maximum = 250;
-    containerTwo.capacities = [capacity];
-    containerTwo.type = 'generic';
-    vehicleTwo.containers = [container];
-    // vehicle.fixedFeatures = [''];
-    // VisitableLocationsForFeature property = new VisitableLocationsForFeature();
-    // property.property1 = [''];
-    // property.property2 = [''];
-    // vehicle.visitableLocationsForFeature = property;
-
-    vehicleTwo.pricePerDeliveryCents = 0;
-    vehicleTwo.pricePerKmCents = 2000;
-    vehicleTwo.pricePerHourCents = 0;
-    vehicleTwo.maxDistanceMetres = 40000;
-    vehicles.add(vehicleTwo);
+    // Vehicle vehicleTwo = new Vehicle();
+    // vehicleTwo.id = uuid.v4().toString();
+    // vehicleTwo.type = 'General';
+    // vehicleTwo.locationStartId = depotLongLat.id;
+    // vehicleTwo.locationEndId = depotLongLat.id;
+    // vehicleTwo.breakDurationMinutes = 0;
+    // vehicleTwo.breakTimeWindowStart = convertDateString(
+    //     '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 730);
+    // vehicleTwo.breakTimeWindowEnd = convertDateString(
+    //     '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 730);
+    // vehicleTwo.availableFromUtc = convertDateString(
+    //     '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 0);
+    // vehicleTwo.availableUntilUtc = convertDateString(
+    //   '${refinedOrders[0].pickupDate}${Secrets.date_suffix}',
+    //   1000,
+    // );
+    // Containerr containerTwo = new Containerr();
+    // containerTwo.type = uuid.v4().toString();
+    // Capacity capacityTwo = new Capacity();
+    // capacityTwo.type = uuid.v4().toString();
+    // capacityTwo.type = 'weight';
+    // capacityTwo.units = 'kg';
+    // capacityTwo.maximum = 250;
+    // containerTwo.capacities = [capacity];
+    // containerTwo.type = 'generic';
+    // vehicleTwo.containers = [container];
+    // // vehicle.fixedFeatures = [''];
+    // // VisitableLocationsForFeature property = new VisitableLocationsForFeature();
+    // // property.property1 = [''];
+    // // property.property2 = [''];
+    // // vehicle.visitableLocationsForFeature = property;
+    //
+    // vehicleTwo.pricePerDeliveryCents = 0;
+    // vehicleTwo.pricePerKmCents = 2000;
+    // vehicleTwo.pricePerHourCents = 0;
+    // vehicleTwo.maxDistanceMetres = 40000;
+    // vehicles.add(vehicleTwo);
 
     // Setting priority
     Priority priority = new Priority();

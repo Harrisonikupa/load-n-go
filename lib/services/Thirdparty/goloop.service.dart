@@ -24,7 +24,7 @@ class GoloopService {
     var response = await client.post(
         Uri.parse('${Secrets.goloop_base_url}token'),
         body: request.toMap());
-    print(response.body);
+    // print(response.body);
     var parsed = jsonDecode(response.body);
     if (parsed['access_token'] != null) {
       responseBody.accessToken = parsed['access_token'];
@@ -47,6 +47,7 @@ class GoloopService {
     headers['Content-Type'] = 'application/json';
     headers['Authorization'] = 'Bearer ${accessToken.accessToken}';
     SubmittedJob submittedJobResponse = new SubmittedJob();
+    print('Job >>>>>>>>>. ${prettyObject(request.toMap())}');
     var response = await client.post(
         Uri.parse('${Secrets.goloop_base_url}api/v1/solver/job'),
         body: jsonEncode(request.toMap()),
@@ -90,7 +91,7 @@ class GoloopService {
     var parsed = json.decode(response.body);
 
     if (response.statusCode == 200) {
-      print('${prettyObject(parsed)} >>>>>>>> Problem for job');
+      // print('${prettyObject(parsed)} >>>>>>>> Problem for job');
       problemForJob = JobDetails.fromMap(parsed);
     } else {
       print('Error >>>>>>>>>>>>>');
@@ -157,7 +158,7 @@ class GoloopService {
     var parsed = json.decode(response.body);
 
     if (response.statusCode == 200) {
-      print('Manifest result >>>>>>>>>>> ${prettyObject(parsed)}');
+      // print('Manifest result >>>>>>>>>>> ${prettyObject(parsed)}');
       manifest = Manifest.fromMap(parsed);
     } else {
       print('Error >>>>>>>>>>>>>');

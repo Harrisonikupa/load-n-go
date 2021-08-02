@@ -53,6 +53,8 @@ class ManifestViewModel extends BaseViewModel {
     successGreenColor
   ];
 
+  dynamic totalDistanceCovered = 0;
+
   modelIsReady() async {
     if (DataStorage.containsKey(DataStorage.keyManifest)) {
       manifest = DataStorage.getManifest();
@@ -64,6 +66,7 @@ class ManifestViewModel extends BaseViewModel {
 
     if (DataStorage.containsKey(DataStorage.keyJob)) {
       job = DataStorage.getJob();
+      print('get job');
     } else {
       print('get job');
     }
@@ -80,6 +83,7 @@ class ManifestViewModel extends BaseViewModel {
 
   changeTab(value) async {
     currentTab = value;
+
     notifyListeners();
   }
 
@@ -98,9 +102,11 @@ class ManifestViewModel extends BaseViewModel {
 
   getLocationDetails() async {
     setBusy(true);
-    if (manifest.manifest![0].route!.isNotEmpty) {
-      manifest.manifest?.asMap().forEach((manifestIndex, mani) {
-        List<ManifestItem> manifestList2 = <ManifestItem>[];
+    // if (manifest.manifest![0].route!.isNotEmpty) {
+    print('aaasd');
+    manifest.manifest?.asMap().forEach((manifestIndex, mani) {
+      List<ManifestItem> manifestList2 = <ManifestItem>[];
+      if (mani.route != null) {
         mani.route!.asMap().forEach((index, rou) async {
           ManifestItem item = new ManifestItem();
           item.arrivalTime = rou.arriveAfter;
@@ -131,23 +137,30 @@ class ManifestViewModel extends BaseViewModel {
           PolylineId id = PolylineId(uuid.v4());
           Polyline polyline = Polyline(
             polylineId: id,
-            color: polylineColors[manifestIndex],
+            color: primaryColor,
             points: polylineCoordinates,
             width: 2,
           );
-          print('$manifestIndex >>>>>>>>>>>>. manifest index');
           polylines[id] = polyline;
           notifyListeners();
         });
-        DriversManifest drivManifest = new DriversManifest();
-        drivManifest.vehicle = mani.vehicle;
-        // drivManifest.totalDistance =
-        //     (mani.distanceTotalMetres / 1000.toStringAsFixed(2));
-        drivManifest.manifestItems = manifestList2;
+      } else {}
 
-        driversManifest.add(drivManifest);
-      });
-    } else {
+      DriversManifest drivManifest = new DriversManifest();
+      drivManifest.vehicle = mani.vehicle;
+      drivManifest.totalDistance = mani.distanceTotalMetres;
+      if (mani.distanceTotalMetres == null) {
+        totalDistanceCovered = totalDistanceCovered + 0;
+      } else {
+        totalDistanceCovered = totalDistanceCovered + mani.distanceTotalMetres;
+      }
+      // drivManifest.totalDistance =
+      //     (mani.distanceTotalMetres / 1000.toStringAsFixed(2));
+      drivManifest.manifestItems = manifestList2;
+
+      driversManifest.add(drivManifest);
+    });
+    /*} else {
       _dialogService.showDialog(
           title: 'Success!',
           description:
@@ -155,7 +168,7 @@ class ManifestViewModel extends BaseViewModel {
 
       setBusy(false);
       return;
-    }
+    }*/
     setBusy(false);
     return manifestList;
   }
@@ -214,96 +227,100 @@ class ManifestViewModel extends BaseViewModel {
   }
 
   Widget manifestListWidget(List<ManifestItem> manifest, context) {
-    driversManifest.forEach((element) {
-      print(element.manifestItems!.length);
-    });
-    // print(manifest);
     SizeConfig().init(context);
     return Container(
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemCount: manifest.length,
-        itemBuilder: (context, index) => Container(
-          margin: new EdgeInsets.only(
-            bottom: getProportionateScreenWidth(10),
-          ),
-          padding: new EdgeInsets.all(
-            getProportionateScreenWidth(20),
-          ),
-          width: double.infinity,
-          height: getProportionateScreenHeight(100),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            border: Border.all(color: primaryColor, width: 2),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              index == 0 || (index == manifest.length - 1)
-                  ? Image.asset(
-                      'assets/images/0.png',
-                      width: getProportionateScreenWidth(30),
-                      height: getProportionateScreenWidth(30),
-                    )
-                  : Container(
-                      height: getProportionateScreenWidth(30),
-                      width: getProportionateScreenWidth(30),
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          '$index',
-                          style: TextStyle(
-                            color: primaryColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: getProportionateScreenWidth(18),
+      child: manifest.length == 0
+          ? Padding(
+              padding: new EdgeInsets.all(getProportionateScreenWidth(20)),
+              child: Text(
+                'No routes assigned to you',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+            )
+          : ListView.builder(
+              shrinkWrap: true,
+              itemCount: manifest.length,
+              itemBuilder: (context, index) => Container(
+                margin: new EdgeInsets.only(
+                  bottom: getProportionateScreenWidth(10),
+                ),
+                padding: new EdgeInsets.all(
+                  getProportionateScreenWidth(20),
+                ),
+                width: double.infinity,
+                height: getProportionateScreenHeight(100),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(color: primaryColor, width: 2),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    index == 0 || (index == manifest.length - 1)
+                        ? Image.asset(
+                            'assets/images/0.png',
+                            width: getProportionateScreenWidth(30),
+                            height: getProportionateScreenWidth(30),
+                          )
+                        : Container(
+                            height: getProportionateScreenWidth(30),
+                            width: getProportionateScreenWidth(30),
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                '$index',
+                                style: TextStyle(
+                                  color: primaryColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: getProportionateScreenWidth(18),
+                                ),
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                              color: whiteColor,
+                              border: Border.all(color: primaryColor, width: 3),
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                          ),
+                    SizedBox(
+                      width: getProportionateScreenWidth(20),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: getProportionateScreenHeight(10),
+                        ),
+                        Padding(
+                          padding: new EdgeInsets.only(right: 30),
+                          child: FittedBox(
+                            child: Text(
+                              '${manifest[index].address}',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                fontSize: getProportionateScreenWidth(12),
+                                fontWeight: FontWeight.w800,
+                                color: blackColor,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                      decoration: BoxDecoration(
-                        color: whiteColor,
-                        border: Border.all(color: primaryColor, width: 3),
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                    ),
-              SizedBox(
-                width: getProportionateScreenWidth(20),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: getProportionateScreenHeight(10),
-                  ),
-                  Padding(
-                    padding: new EdgeInsets.only(right: 30),
-                    child: FittedBox(
-                      child: Text(
-                        '${manifest[index].address}',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: getProportionateScreenWidth(12),
-                          fontWeight: FontWeight.w800,
-                          color: blackColor,
+                        SizedBox(
+                          height: getProportionateScreenWidth(8),
                         ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: getProportionateScreenWidth(8),
-                  ),
-                  Text(
-                    '${getTime(manifest[index].arrivalTime)} - ${getTime(manifest[index].departureTime)}',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: getProportionateScreenWidth(12),
-                        color: borderGreyColor),
-                  )
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
+                        Text(
+                          '${getTime(manifest[index].arrivalTime)} - ${getTime(manifest[index].departureTime)}',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: getProportionateScreenWidth(12),
+                              color: borderGreyColor),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
     );
   }
 

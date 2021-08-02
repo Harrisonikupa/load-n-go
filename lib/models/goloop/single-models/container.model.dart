@@ -1,7 +1,7 @@
 import 'package:loadngo/models/goloop/single-models/capacity.model.dart';
 
-class Container {
-  Container({
+class Containerr {
+  Containerr({
     this.type,
     this.capacities,
   });
@@ -9,7 +9,7 @@ class Container {
   String? type;
   List<Capacity>? capacities;
 
-  factory Container.fromMap(Map<String, dynamic> json) => Container(
+  factory Containerr.fromMap(Map<String, dynamic> json) => Containerr(
         type: json["type"],
         capacities: List<Capacity>.from(
             json["capacities"].map((x) => Capacity.fromMap(x))),

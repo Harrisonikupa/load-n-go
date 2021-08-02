@@ -29,7 +29,7 @@ class Vehicle {
   String? breakTimeWindowStart;
   String? breakTimeWindowEnd;
   String? availableUntilUtc;
-  List<Container>? containers;
+  List<Containerr>? containers;
   Null fixedFeatures;
   Null visitableLocationsForFeature;
   int? pricePerDeliveryCents;
@@ -47,9 +47,9 @@ class Vehicle {
         breakDurationMinutes: json["break_duration_minutes"],
         breakTimeWindowStart: json["break_time_window_start"],
         breakTimeWindowEnd: json["break_time_window_end"],
-        containers: List<Container>.from(
+        containers: List<Containerr>.from(
           json["containers"].map(
-            (x) => Container.fromMap(x),
+            (x) => Containerr.fromMap(x),
           ),
         ),
         fixedFeatures: json["fixed_features"],

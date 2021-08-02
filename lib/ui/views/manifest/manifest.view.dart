@@ -295,7 +295,7 @@ class ManifestView extends StatelessWidget {
                                                 getProportionateScreenHeight(5),
                                           ),
                                           Text(
-                                            '${(model.manifest.manifest![0].distanceTotalMetres / 1000).toStringAsFixed(2)}KM',
+                                            '${(model.totalDistanceCovered / 1000).toStringAsFixed(2)}KM',
                                             style: TextStyle(
                                                 color: darkGreyColor,
                                                 fontWeight: FontWeight.bold,

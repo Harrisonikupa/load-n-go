@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:loadngo/app/app.locator.dart';
 import 'package:loadngo/app/app.router.dart';
@@ -52,7 +53,7 @@ class OptimizedRouteViewModel extends BaseViewModel {
     listenToJobs();
     await fetchOrders();
     // await getSubmittedJobs();
-    var response = await convertDeliveryAddressesToLongAndLat(orders);
+    var response = await convertDeliveryAddressesToLongAndLat(_orders);
     if (response is List<OrderWithLocation>) {
       _refinedOrders = response;
     }
@@ -77,8 +78,10 @@ class OptimizedRouteViewModel extends BaseViewModel {
       List<OrderWithLocation> orders) async {
     List<OrderWithLocation> ordersWithCoordinates = <OrderWithLocation>[];
     orders.forEach((order) async {
+      print('delivery code is ${order.deliveryPostalCode}');
       List<Location> locations =
           await locationFromAddress(order.deliveryPostalCode!);
+      print('It happened the delivery code ${order.deliveryPostalCode}');
 
       locations.forEach((location) {
         order.longitude = location.longitude;
@@ -91,7 +94,7 @@ class OptimizedRouteViewModel extends BaseViewModel {
 
   createJob() async {
     setBusy(true);
-    int clientServiceTime = 10;
+    int clientServiceTime = 15;
     JobDetails job = new JobDetails();
     ModelOptions modelOptions = new ModelOptions();
     List<Consignment> consignments = <Consignment>[];
@@ -100,9 +103,7 @@ class OptimizedRouteViewModel extends BaseViewModel {
     List<Priority> priorities = <Priority>[];
     var uuid = Uuid();
 
-    List<Location> depotLocation = await locationFromAddress('189969');
-
-    List<Location> depotLocation2 = await locationFromAddress('189969');
+    List<Location> depotLocation = await locationFromAddress('486016');
 
     Future.delayed(
         Duration(seconds: 1),
@@ -112,22 +113,14 @@ class OptimizedRouteViewModel extends BaseViewModel {
                 depotLatitude = location.latitude;
               })
             });
-    Future.delayed(
-        Duration(seconds: 1),
-        () => {
-              depotLocation2.forEach((location) {
-                depotLongitude2 = location.longitude;
-                depotLatitude2 = location.latitude;
-              })
-            });
 
     // Populate model options
     modelOptions.computeTimeMilliseconds = 25000;
-    modelOptions.lateHourlyPenaltyCents = 1000;
+    modelOptions.lateHourlyPenaltyCents = 0;
     modelOptions.workingTimeLimitMinutes = 1020;
     modelOptions.timeWindows = 'soft';
     modelOptions.performBreaks = false;
-    modelOptions.nodeSlackTimeMinutes = 10;
+    modelOptions.nodeSlackTimeMinutes = 30;
     modelOptions.firstSolutionStrategy = null;
     modelOptions.localSearchMetaheuristic = null;
 
@@ -142,7 +135,7 @@ class OptimizedRouteViewModel extends BaseViewModel {
     locations.add(depotLongLat);
 
     int? lastTimeAdded = 0;
-    const increase = 15;
+    const increase = 20;
     refinedOrders.asMap().forEach((index, order) {
       Locations location = new Locations();
       location.id = uuid.v4().toString();
@@ -172,7 +165,7 @@ class OptimizedRouteViewModel extends BaseViewModel {
       CapacitiesUsed capacitiesUsed = new CapacitiesUsed();
       capacitiesUsed.type = 'weight';
       capacitiesUsed.units = 'kg';
-      capacitiesUsed.used = order.quantity;
+      capacitiesUsed.used = 1;
       consignment.capacitiesUsed = [capacitiesUsed];
       consignment.vehicleContainerTypeRequired = 'generic';
       consignments.add(consignment);
@@ -196,7 +189,7 @@ class OptimizedRouteViewModel extends BaseViewModel {
       '${refinedOrders[0].pickupDate}${Secrets.date_suffix}',
       1000,
     );
-    Container container = new Container();
+    Containerr container = new Containerr();
     container.type = uuid.v4().toString();
     Capacity capacity = new Capacity();
     capacity.type = uuid.v4().toString();
@@ -215,52 +208,52 @@ class OptimizedRouteViewModel extends BaseViewModel {
     vehicle.pricePerDeliveryCents = 0;
     vehicle.pricePerKmCents = 2000;
     vehicle.pricePerHourCents = 0;
-    vehicle.maxDistanceMetres = 500000;
+    vehicle.maxDistanceMetres = 40000;
     vehicles.add(vehicle);
 
-    // // Vehicle Two
-    // Vehicle vehicleTwo = new Vehicle();
-    // vehicleTwo.id = uuid.v4().toString();
-    // vehicleTwo.type = 'General';
-    // vehicleTwo.locationStartId = depotLongLat.id;
-    // vehicleTwo.locationEndId = depotLongLat.id;
-    // vehicleTwo.breakDurationMinutes = 0;
-    // vehicleTwo.breakTimeWindowStart = convertDateString(
-    //     '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 730);
-    // vehicleTwo.breakTimeWindowEnd = convertDateString(
-    //     '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 730);
-    // vehicleTwo.availableFromUtc = convertDateString(
-    //     '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 0);
-    // vehicleTwo.availableUntilUtc = convertDateString(
-    //   '${refinedOrders[0].pickupDate}${Secrets.date_suffix}',
-    //   1000,
-    // );
-    // Container containerTwo = new Container();
-    // containerTwo.type = uuid.v4().toString();
-    // Capacity capacityTwo = new Capacity();
-    // capacityTwo.type = uuid.v4().toString();
-    // capacityTwo.type = 'weight';
-    // capacityTwo.units = 'kg';
-    // capacityTwo.maximum = 250;
-    // containerTwo.capacities = [capacity];
-    // containerTwo.type = 'generic';
-    // vehicleTwo.containers = [container];
-    // // vehicle.fixedFeatures = [''];
-    // // VisitableLocationsForFeature property = new VisitableLocationsForFeature();
-    // // property.property1 = [''];
-    // // property.property2 = [''];
-    // // vehicle.visitableLocationsForFeature = property;
-    //
-    // vehicleTwo.pricePerDeliveryCents = 0;
-    // vehicleTwo.pricePerKmCents = 2000;
-    // vehicleTwo.pricePerHourCents = 0;
-    // vehicleTwo.maxDistanceMetres = 20000;
-    // vehicles.add(vehicleTwo);
+    // Vehicle Two
+    Vehicle vehicleTwo = new Vehicle();
+    vehicleTwo.id = uuid.v4().toString();
+    vehicleTwo.type = 'General';
+    vehicleTwo.locationStartId = depotLongLat.id;
+    vehicleTwo.locationEndId = depotLongLat.id;
+    vehicleTwo.breakDurationMinutes = 0;
+    vehicleTwo.breakTimeWindowStart = convertDateString(
+        '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 730);
+    vehicleTwo.breakTimeWindowEnd = convertDateString(
+        '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 730);
+    vehicleTwo.availableFromUtc = convertDateString(
+        '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 0);
+    vehicleTwo.availableUntilUtc = convertDateString(
+      '${refinedOrders[0].pickupDate}${Secrets.date_suffix}',
+      1000,
+    );
+    Containerr containerTwo = new Containerr();
+    containerTwo.type = uuid.v4().toString();
+    Capacity capacityTwo = new Capacity();
+    capacityTwo.type = uuid.v4().toString();
+    capacityTwo.type = 'weight';
+    capacityTwo.units = 'kg';
+    capacityTwo.maximum = 250;
+    containerTwo.capacities = [capacity];
+    containerTwo.type = 'generic';
+    vehicleTwo.containers = [container];
+    // vehicle.fixedFeatures = [''];
+    // VisitableLocationsForFeature property = new VisitableLocationsForFeature();
+    // property.property1 = [''];
+    // property.property2 = [''];
+    // vehicle.visitableLocationsForFeature = property;
+
+    vehicleTwo.pricePerDeliveryCents = 0;
+    vehicleTwo.pricePerKmCents = 2000;
+    vehicleTwo.pricePerHourCents = 0;
+    vehicleTwo.maxDistanceMetres = 40000;
+    vehicles.add(vehicleTwo);
 
     // Setting priority
     Priority priority = new Priority();
     priority.id = 'standard';
-    priority.penaltyFactor = 10;
+    priority.penaltyFactor = 1;
     priorities.add(priority);
 
     job.modelOptions = modelOptions;
@@ -311,198 +304,6 @@ class OptimizedRouteViewModel extends BaseViewModel {
     return prettyString;
   }
 
-  /*encodeJsonString() {
-    dynamic object = {
-      "consignments": [
-        {
-          "capacities_used": [
-            {"type": "load", "units": "item", "used": 15}
-          ],
-          "deliver_service_time_minutes": 5,
-          "deliver_time_end_utc": "2020-02-17T18:00Z",
-          "deliver_time_start_utc": "2020-02-17T08:30Z",
-          "deliver_time_window_constraint": "hard",
-          "id": "10728755",
-          "priority": "Standard",
-          "location_id_from": "loc_a",
-          "location_id_to": "loc_b",
-          "pickup_service_time_minutes": 5,
-          "pickup_time_end_utc": "2020-02-19T17:00Z",
-          "pickup_time_start_utc": "2020-02-17T08:30Z",
-          "pickup_time_window_constraint": "soft",
-          "vehicle_container_type_required": "generic",
-          "vehicle_fixed_features_required": null,
-          "vehicles_allowed": null,
-          "vehicles_refused": null
-        },
-        {
-          "capacities_used": [
-            {"type": "load", "units": "item", "used": 26}
-          ],
-          "deliver_service_time_minutes": 10,
-          "deliver_time_end_utc": "2020-02-17T18:00Z",
-          "deliver_time_start_utc": "2020-02-17T08:30Z",
-          "deliver_time_window_constraint": "hard",
-          "id": "10728739",
-          "priority": "Standard",
-          "location_id_from": "loc_a",
-          "location_id_to": "loc_c",
-          "pickup_service_time_minutes": 5,
-          "pickup_time_end_utc": "2020-02-17T11:00Z",
-          "pickup_time_start_utc": "2020-02-17T08:30Z",
-          "pickup_time_window_constraint": "soft",
-          "vehicle_container_type_required": "generic",
-          "vehicle_fixed_features_required": null,
-          "vehicles_allowed": null,
-          "vehicles_refused": null
-        },
-        {
-          "capacities_used": [
-            {"type": "load", "units": "item", "used": 1}
-          ],
-          "deliver_service_time_minutes": 15,
-          "deliver_time_end_utc": "2020-02-17T18:00Z",
-          "deliver_time_start_utc": "2020-02-17T08:30Z",
-          "deliver_time_window_constraint": "hard",
-          "id": "10728632",
-          "priority": "Urgent",
-          "location_id_from": "loc_a",
-          "location_id_to": "loc_d",
-          "pickup_service_time_minutes": 5,
-          "pickup_time_end_utc": "2020-02-17T18:00Z",
-          "pickup_time_start_utc": "2020-02-17T08:30Z",
-          "pickup_time_window_constraint": "soft",
-          "vehicle_container_type_required": "generic",
-          "vehicle_fixed_features_required": null,
-          "vehicles_allowed": null,
-          "vehicles_refused": null
-        }
-      ],
-      "locations": [
-        {
-          "available_from_utc": null,
-          "available_until_utc": null,
-          "id": "loc_a",
-          "latitude": "-33.8211673",
-          "longitude": "151.1207459",
-          "vehicle_features_required": null,
-          "vehicle_types_allowed": null,
-          "vehicle_types_refused": null,
-          "vehicles_allowed": null,
-          "vehicles_refused": null,
-          "vehicle_features_refused": null
-        },
-        {
-          "available_from_utc": null,
-          "available_until_utc": null,
-          "id": "loc_b",
-          "latitude": "-33.8178616",
-          "longitude": "151.1913204",
-          "vehicle_features_required": null,
-          "vehicle_types_allowed": null,
-          "vehicle_types_refused": null,
-          "vehicles_allowed": null,
-          "vehicles_refused": null,
-          "vehicle_features_refused": null
-        },
-        {
-          "available_from_utc": null,
-          "available_until_utc": null,
-          "id": "loc_c",
-          "latitude": "-33.7044223",
-          "longitude": "151.21014719999994",
-          "vehicle_features_required": null,
-          "vehicle_types_allowed": null,
-          "vehicle_types_refused": null,
-          "vehicles_allowed": null,
-          "vehicles_refused": null,
-          "vehicle_features_refused": null
-        },
-        {
-          "available_from_utc": null,
-          "available_until_utc": null,
-          "id": "loc_d",
-          "latitude": "-33.810770",
-          "longitude": "151.147496",
-          "vehicle_features_required": null,
-          "vehicle_types_allowed": null,
-          "vehicle_types_refused": null,
-          "vehicles_allowed": null,
-          "vehicles_refused": null,
-          "vehicle_features_refused": null
-        }
-      ],
-      "model_options": {
-        "compute_time_milliseconds": 12000,
-        "late_hourly_penalty_cents": 2000,
-        "node_slack_time_minutes": 20,
-        "perform_breaks": false,
-        "time_windows": "soft",
-        "working_time_limit_minutes": 1020,
-        "first_solution_strategy": null,
-        "local_search_metaheuristic": null
-      },
-      "vehicles": [
-        {
-          "available_from_utc": "2020-02-17T08:30Z",
-          "available_until_utc": "2020-02-17T18:00Z",
-          "break_duration_minutes": 30,
-          "break_time_window_end": "2020-02-17T14:00Z",
-          "break_time_window_start": "2020-02-17T12:00Z",
-          "containers": [
-            {
-              "capacities": [
-                {"maximum": 216, "type": "load", "units": "item"}
-              ],
-              "type": "generic"
-            }
-          ],
-          "fixed_features": null,
-          "id": "DiverA",
-          "location_end_id": "loc_a",
-          "location_start_id": "loc_a",
-          "max_distance_metres": 150000,
-          "price_per_delivery_cents": 0,
-          "price_per_hour_cents": 0,
-          "price_per_km_cents": 3500,
-          "type": "Truck",
-          "visitable_locations_for_feature": null
-        },
-        {
-          "available_from_utc": "2020-02-17T08:30Z",
-          "available_until_utc": "2020-02-17T18:00Z",
-          "break_duration_minutes": 30,
-          "break_time_window_end": "2020-02-17T14:00Z",
-          "break_time_window_start": "2020-02-17T12:00Z",
-          "containers": [
-            {
-              "capacities": [
-                {"maximum": 135, "type": "load", "units": "item"}
-              ],
-              "type": "generic"
-            }
-          ],
-          "fixed_features": null,
-          "id": "DiverB",
-          "location_end_id": "loc_a",
-          "location_start_id": "loc_a",
-          "max_distance_metres": 150000,
-          "price_per_delivery_cents": 0,
-          "price_per_hour_cents": 0,
-          "price_per_km_cents": 3200,
-          "type": "Truck",
-          "visitable_locations_for_feature": null
-        }
-      ],
-      "priorities": [
-        {"id": "Standard", "penalty_factor": 10},
-        {"id": "Urgent", "penalty_factor": 100}
-      ]
-    };
-
-    return object;
-  }*/
-
   getSolution(index) async {
     setBusy(true);
     int? jobId = jobs[index].jobId;
@@ -522,20 +323,17 @@ class OptimizedRouteViewModel extends BaseViewModel {
           var manifestResult =
               await _goloopService.getJobManifest(jobId, solution.solutionId);
           if (manifestResult is Manifest) {
-            print(
-                'Manifest result >>>>>>>>>>> ${prettyObject(manifestResult.toMap())}');
             await DataStorage.setManifest(manifestResult);
             navigationService.navigateTo(Routes.manifestView);
             // Route us to the map
           } else {
-            print('Manifest not found');
+            debugPrint('Manifest not found');
           }
         } else {
           _dialogService.showDialog(
               title: 'In Progress!',
               description:
                   'Your optimization is currently in progress. It\'ll just take a few minutes');
-          print('Display to user that optimization is not ready');
         }
       }
     }

@@ -17,13 +17,17 @@ class ManifestElement {
         consignments: json["consignments"],
         distanceTotalMetres: json["distance_total_metres"],
         vehicle: json["vehicle"],
-        route: List<Route>.from(json["route"].map((x) => Route.fromMap(x))),
+        route: json["route"] == null
+            ? null
+            : List<Route>.from(json["route"]?.map((x) => Route.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
         "consignments": consignments,
         "distance_total_metres": distanceTotalMetres,
         "vehicle": vehicle,
-        "route": List<dynamic>.from(route!.map((x) => x.toMap())),
+        "route": route == null
+            ? null
+            : List<dynamic>.from(route!.map((x) => x.toMap())),
       };
 }

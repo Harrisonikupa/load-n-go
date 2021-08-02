@@ -61,10 +61,10 @@ class OrdersViewModel extends BaseViewModel {
     newOrder.orderDescription = '1 Carton of water';
     newOrder.weightOfOrder = '50g';
     newOrder.quantity = 11;
-    newOrder.pickupDate = '2021-08-11';
+    newOrder.pickupDate = '2021-08-03';
     newOrder.pickupAddress = '123 Raffles Place';
     newOrder.pickupPostalCode = '101111';
-    newOrder.deliveryDate = '2021-08-11';
+    newOrder.deliveryDate = '2021-08-03';
     newOrder.deliveryAddress = '123 City Hall';
     newOrder.deliveryPostalCode = '546090';
     newOrder.customerFirstName = 'Jamie';

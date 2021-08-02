@@ -213,47 +213,47 @@ class OptimizedRouteViewModel extends BaseViewModel {
     vehicle.pricePerDeliveryCents = 0;
     vehicle.pricePerKmCents = 2000;
     vehicle.pricePerHourCents = 0;
-    vehicle.maxDistanceMetres = 500000;
+    vehicle.maxDistanceMetres = 100000;
     vehicles.add(vehicle);
 
     // Vehicle Two
-    // Vehicle vehicleTwo = new Vehicle();
-    // vehicleTwo.id = uuid.v4().toString();
-    // vehicleTwo.type = 'General';
-    // vehicleTwo.locationStartId = depotLongLat.id;
-    // vehicleTwo.locationEndId = depotLongLat.id;
-    // vehicleTwo.breakDurationMinutes = 0;
-    // vehicleTwo.breakTimeWindowStart = convertDateString(
-    //     '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 730);
-    // vehicleTwo.breakTimeWindowEnd = convertDateString(
-    //     '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 730);
-    // vehicleTwo.availableFromUtc = convertDateString(
-    //     '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 0);
-    // vehicleTwo.availableUntilUtc = convertDateString(
-    //   '${refinedOrders[0].pickupDate}${Secrets.date_suffix}',
-    //   1000,
-    // );
-    // Containerr containerTwo = new Containerr();
-    // containerTwo.type = uuid.v4().toString();
-    // Capacity capacityTwo = new Capacity();
-    // capacityTwo.type = uuid.v4().toString();
-    // capacityTwo.type = 'weight';
-    // capacityTwo.units = 'kg';
-    // capacityTwo.maximum = 250;
-    // containerTwo.capacities = [capacity];
-    // containerTwo.type = 'generic';
-    // vehicleTwo.containers = [container];
-    // // vehicle.fixedFeatures = [''];
-    // // VisitableLocationsForFeature property = new VisitableLocationsForFeature();
-    // // property.property1 = [''];
-    // // property.property2 = [''];
-    // // vehicle.visitableLocationsForFeature = property;
-    //
-    // vehicleTwo.pricePerDeliveryCents = 0;
-    // vehicleTwo.pricePerKmCents = 2000;
-    // vehicleTwo.pricePerHourCents = 0;
-    // vehicleTwo.maxDistanceMetres = 40000;
-    // vehicles.add(vehicleTwo);
+    Vehicle vehicleTwo = new Vehicle();
+    vehicleTwo.id = uuid.v4().toString();
+    vehicleTwo.type = 'General';
+    vehicleTwo.locationStartId = depotLongLat.id;
+    vehicleTwo.locationEndId = depotLongLat.id;
+    vehicleTwo.breakDurationMinutes = 0;
+    vehicleTwo.breakTimeWindowStart = convertDateString(
+        '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 730);
+    vehicleTwo.breakTimeWindowEnd = convertDateString(
+        '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 730);
+    vehicleTwo.availableFromUtc = convertDateString(
+        '${refinedOrders[0].pickupDate}${Secrets.date_suffix}', 0);
+    vehicleTwo.availableUntilUtc = convertDateString(
+      '${refinedOrders[0].pickupDate}${Secrets.date_suffix}',
+      1000,
+    );
+    Containerr containerTwo = new Containerr();
+    containerTwo.type = uuid.v4().toString();
+    Capacity capacityTwo = new Capacity();
+    capacityTwo.type = uuid.v4().toString();
+    capacityTwo.type = 'weight';
+    capacityTwo.units = 'kg';
+    capacityTwo.maximum = 250;
+    containerTwo.capacities = [capacity];
+    containerTwo.type = 'generic';
+    vehicleTwo.containers = [container];
+    // vehicle.fixedFeatures = [''];
+    // VisitableLocationsForFeature property = new VisitableLocationsForFeature();
+    // property.property1 = [''];
+    // property.property2 = [''];
+    // vehicle.visitableLocationsForFeature = property;
+
+    vehicleTwo.pricePerDeliveryCents = 0;
+    vehicleTwo.pricePerKmCents = 2000;
+    vehicleTwo.pricePerHourCents = 0;
+    vehicleTwo.maxDistanceMetres = 100000;
+    vehicles.add(vehicleTwo);
 
     // Setting priority
     Priority priority = new Priority();
